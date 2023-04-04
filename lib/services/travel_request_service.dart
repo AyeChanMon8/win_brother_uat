@@ -488,8 +488,10 @@ class TravelRequestService extends OdooService {
     final box = GetStorage();
     var startDate = box.read('ficial_start_date');
     var endDate = box.read('ficial_end_date');
+    // String url = Globals.baseURL +
+    //     "/hr.travel.expense?filters=[('employee_id','=',$employeeID),('create_date','>=','$startDate'),('create_date','<=','$endDate')]&limit="+Globals.pag_limit.toString()+"&offset="+offset;
     String url = Globals.baseURL +
-        "/hr.travel.expense?filters=[('employee_id','=',$employeeID),('create_date','>=','$startDate'),('create_date','<=','$endDate')]&limit="+Globals.pag_limit.toString()+"&offset="+offset;
+        "/hr.travel.expense?filters=[('employee_id','=',$employeeID)]&limit="+Globals.pag_limit.toString()+"&offset="+offset;
     Response response = await dioClient.get(url);
     List<TravelExpenseList> travelExpense = new List<TravelExpenseList>();
     if (response.statusCode == 200) {

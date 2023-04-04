@@ -118,6 +118,8 @@ class RewardController extends GetxController {
           rewards.value = data;
           update();
         }
+      }else{
+        rewards.value = [];
       }
       Get.back();
     });

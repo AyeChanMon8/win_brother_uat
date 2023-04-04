@@ -18,7 +18,7 @@ class RewardApprovalPage extends StatefulWidget {
 class _RewardApprovalPageState extends State<RewardApprovalPage> {
   final RewardController controller = Get.put(RewardController());
   Future _loadData() async {
-    widget.pageType == 'approval'
+    widget.pageType.toLowerCase() == 'approval'
         ? controller.getRewardsApproval()
         : controller.getRewardApprove();
   }
@@ -27,7 +27,7 @@ class _RewardApprovalPageState extends State<RewardApprovalPage> {
   void initState() {
     super.initState();
     controller.offset.value = 0;
-    widget.pageType == 'approval'
+    widget.pageType.toLowerCase() == 'approval'
         ? controller.getRewardsApproval()
         : controller.getRewardApprove();
   }
@@ -97,7 +97,7 @@ class _RewardApprovalPageState extends State<RewardApprovalPage> {
                 },
               ),
             ),
-            onRefresh: widget.pageType == 'approval'
+            onRefresh: widget.pageType.toLowerCase() == 'approval'
                 ? controller.getRewardsApproval
                 : controller.getRewardApprove)));
   }

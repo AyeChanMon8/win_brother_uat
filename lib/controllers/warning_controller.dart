@@ -136,6 +136,8 @@ class WarningController extends GetxController {
         if (data.length != 0) {
           warnings.value = data;
           // update();
+        }else{
+          warnings.value = [];
         }
       }
       update();
