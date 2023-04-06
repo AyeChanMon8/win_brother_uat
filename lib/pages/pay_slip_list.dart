@@ -38,20 +38,20 @@ class _PayslipListPageState extends State<PayslipListPage> {
           backgroundColor: backgroundIconColor,
         ),
         body: Obx(()=>NotificationListener<ScrollNotification>(
-          onNotification: (ScrollNotification scrollInfo) {
-            if (!controller.isLoading.value && scrollInfo.metrics.pixels ==
-                scrollInfo.metrics.maxScrollExtent) {
-              print("*****BottomOfPmsList*****");
-              if(controller.paySlips.length>=10){
-                controller.offset.value +=Globals.pag_limit;
-                controller.isLoading.value = true;
-                _loadData();
-              }
-              // start loading data
+          // onNotification: (ScrollNotification scrollInfo) {
+          //   if (!controller.isLoading.value && scrollInfo.metrics.pixels ==
+          //       scrollInfo.metrics.maxScrollExtent) {
+          //     print("*****BottomOfPmsList*****");
+          //     if(controller.paySlips.length>=10){
+          //       controller.offset.value +=Globals.pag_limit;
+          //       controller.isLoading.value = true;
+          //       _loadData();
+          //     }
+          //     // start loading data
 
-            }
-            return true;
-          },
+          //   }
+          //   return true;
+          // },
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: controller.paySlips.length,
