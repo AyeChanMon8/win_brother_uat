@@ -13,6 +13,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:winbrother_hr_app/constants/globals.dart';
 import 'package:winbrother_hr_app/controllers/announcements_controller.dart';
 import 'package:winbrother_hr_app/localization.dart';
 import 'package:winbrother_hr_app/my_class/my_app_bar.dart';
@@ -26,6 +27,8 @@ class AnnouncementsDetails extends StatelessWidget {
   final box = GetStorage();
   int index;
   String image;
+  List<String> announcement;
+  String announcementText;
   Future<String> _createFileFromString(String encodedStr) async {
     //final encodedStr = "put base64 encoded string here";
     Uint8List bytes = base64.decode(encodedStr);
@@ -54,7 +57,12 @@ class AnnouncementsDetails extends StatelessWidget {
     index = Get.arguments;
     final labels = AppLocalizations.of(context);
     image = box.read('emp_image');
-
+    if(controller.announcementList.value[index].announcement.contains("src=\"/web/image/")){
+      announcement = controller.announcementList.value[index].announcement.split('src=\"/web/image/');
+      announcementText = announcement[0]+'src=\"'+Globals.baseURL.split('/api')[0]+'/web/image/'+announcement[1];
+    }else{
+      announcementText = controller.announcementList.value[index].announcement;
+    }
     return Scaffold(
       appBar: appbar(context, "Announcements Details", image),
       body: SingleChildScrollView(
@@ -114,7 +122,7 @@ class AnnouncementsDetails extends StatelessWidget {
                       launch(link);
                     },
                     data:
-                        controller.announcementList.value[index].announcement),
+                        announcementText),
               ),
               /*SizedBox(
                         // paddingOnly(left: 30),
