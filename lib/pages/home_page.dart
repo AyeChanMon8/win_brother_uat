@@ -208,6 +208,7 @@ class _MainState extends State<HomePage> {
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       this.setState(() {
+        announcementsController.getAnnouncementsList();
         _debugLabelString =
             "Opened notification: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}";
       });

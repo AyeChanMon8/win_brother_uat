@@ -23,7 +23,7 @@ import 'package:winbrother_hr_app/models/travel_expense/travel_expense_product.d
 import 'package:winbrother_hr_app/my_class/my_app_bar.dart';
 import 'package:winbrother_hr_app/my_class/my_style.dart';
 import 'package:winbrother_hr_app/utils/app_utils.dart';
-// import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 class OutOfPocketCreate extends StatefulWidget {
   static void showToast(String msg) {
     Get.snackbar('Warning', msg, snackPosition: SnackPosition.BOTTOM);
@@ -96,9 +96,9 @@ class _OutOfPocketCreateState extends State<OutOfPocketCreate> {
   Future getCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera ,maxHeight: 480,
         maxWidth: 640,imageQuality: 100);
-    // File rotatedImage =
-    //       await FlutterExifRotation.rotateImage(path: pickedFile.path);
-    File image = File(pickedFile.path);
+    File rotatedImage =
+          await FlutterExifRotation.rotateImage(path: pickedFile.path);
+    File image = File(rotatedImage.path);
     File compressedFile = await AppUtils.reduceImageFileSize(image);
     final bytes = Io.File(compressedFile.path).readAsBytesSync();
     img64 = base64Encode(bytes);

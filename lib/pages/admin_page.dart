@@ -95,13 +95,13 @@ class _AdminPageState extends State<AdminPage> {
         Routes.DOCUMENTS
       ]);
     }
-    if (purchase_order != null) {
-      admin.add([
-        FontAwesomeIcons.shoppingCart,
-        labels?.purchaseOrder,
-        Routes.PURCHASE_ORDER_LIST
-      ]);
-    }
+    // if (purchase_order != null) {
+    //   admin.add([
+    //     FontAwesomeIcons.shoppingCart,
+    //     labels?.purchaseOrder,
+    //     Routes.PURCHASE_ORDER_LIST
+    //   ]);
+    // }
 
     return Scaffold(
       appBar: appbar(context, labels?.adminTitle, image),
