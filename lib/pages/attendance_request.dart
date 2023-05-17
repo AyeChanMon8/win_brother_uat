@@ -123,8 +123,10 @@ class AttendanceRequest extends GetWidget<AttendanceRequestController> {
                 InkWell(
                   onTap: () {
                     if (attendance != null) {
-                      controller.makeAttendance(
+                      _getLocation().then((value){
+                        controller.makeAttendance(
                           _userProfileController.empData.value.fingerprint_id);
+                      });
                     } else {
                       showDialog(
                           context: context,
@@ -373,6 +375,16 @@ class AttendanceRequest extends GetWidget<AttendanceRequestController> {
     );
   }
 
+  Future<void> _getLocation() async{
+     _locationData = await location.getLocation().then((value) {
+      print('locationReceived');
+      print(value.latitude);
+      print(value.longitude);
+      controller.user_latitude.value = value.latitude;
+      controller.user_longitude.value = value.longitude;
+    });
+  }
+
   Future<void> _checkPermission() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -390,12 +402,6 @@ class AttendanceRequest extends GetWidget<AttendanceRequestController> {
       }
     }
 
-    _locationData = await location.getLocation().then((value) {
-      print('locationReceived');
-      print(value.latitude);
-      print(value.longitude);
-      controller.user_latitude.value = value.latitude;
-      controller.user_longitude.value = value.longitude;
-    });
+   
   }
 }

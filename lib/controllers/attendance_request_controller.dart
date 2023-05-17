@@ -62,11 +62,13 @@ class AttendanceRequestController extends GetxController {
     await attendanceService
         .createAttendanceCheckIn(attendanceRequest)
         .then((value) {
+      if(value){
       Get.back();
       box.write(Globals.check_in_or_not, !check_in.value);
       check_in.value=!check_in.value;
       getAttendance();
       AppUtils.showDialog('Information', 'Successfully Created Attendance');
+      }
     });
   }
 

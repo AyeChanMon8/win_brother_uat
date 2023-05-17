@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:winbrother_hr_app/constants/globals.dart';
 import 'package:winbrother_hr_app/models/attandanceuser.dart';
 import 'package:winbrother_hr_app/models/attendance.dart';
@@ -92,9 +93,15 @@ class AttendanceService extends OdooService {
     Response response =
         await dioClient.put(url, data: attendanceRequest.toJson());
     if (response.statusCode == 200) {
-      isCreated = response.data;
+      if(response.data){
+        isCreated = response.data;
+      }else{
+        Get.back();
+      }
     } else {
-      AppUtils.showDialog('Information', 'Duplicate Record Found!');
+      // AppUtils.showDialog('Information', 'Duplicate Record Found!');
+      Get.back();
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
     }
     return isCreated;
   }

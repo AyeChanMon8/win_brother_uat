@@ -48,7 +48,7 @@ class _MainState extends State<HomePage> {
     super.initState();
     initPlatformState();
     notiController.retrieveMsgs();
-   // announcementsController.onReady();
+    announcementsController.onReady();
     //_handleSetExternalUserId();
   }
 
