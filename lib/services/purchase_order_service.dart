@@ -61,13 +61,13 @@ class PurchaseOrderService extends OdooService {
     return result;
   }
 
-  Future<bool> cancelPurchaseOrder(int id) async {
+  Future<bool> cancelPurchaseOrder(int id, String reason) async {
     var result;
     String url = Globals.baseURL +
         "/purchase.order.approval.matrix/" +
         id.toString() +
         "/action_refuse";
-    Response response = await dioClient.put(url);
+    Response response = await dioClient.put(url,data: jsonEncode({'reason': reason.toString()}));
 
     if (response.statusCode == 200) {
       result = true;

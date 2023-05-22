@@ -1,6 +1,7 @@
 // @dart=2.9
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:winbrother_hr_app/controllers/purchase_order_controller.dart';
 import 'package:winbrother_hr_app/localization.dart';
@@ -16,15 +17,26 @@ class PurchaseOrderDetails extends StatefulWidget {
 class _PurchaseOrderDetailsState extends State<PurchaseOrderDetails> {
   final PurchaseOrderController controller = Get.put(PurchaseOrderController());
   int index;
-
+  // String _radioGroupValue;
+  List<RadioListTile> answersRadio = [];
+  List<String> list = [];
+  TextEditingController reject_controller = TextEditingController();  
+  
   @override
   Widget build(BuildContext context) {
     index = Get.arguments;
+   
     final labels = AppLocalizations.of(context);
     if (controller.purchaseOrderApprovalList.value[index].state) {
       controller.button_approve_show.value = false;
     } else {
       controller.button_approve_show.value = true;
+    }
+    list = controller.purchaseOrderApprovalList.value[index].reject_reasons_list;
+    if(controller.purchaseOrderApprovalList.value[index].reject_reasons_list.length > 0){
+      reject_controller.text = controller.purchaseOrderApprovalList.value[index].reject_reasons_list[0];
+    }else{
+      reject_controller.text = "";
     }
     return Scaffold(
       appBar: appbar(context, labels?.purchaseOrderDetail, ''),
@@ -56,6 +68,7 @@ class _PurchaseOrderDetailsState extends State<PurchaseOrderDetails> {
   }
 
   Widget actionsButton(BuildContext context) {
+  
     final labels = AppLocalizations.of(context);
     return Container(
       child: Row(
@@ -88,7 +101,8 @@ class _PurchaseOrderDetailsState extends State<PurchaseOrderDetails> {
                 child: RaisedButton(
                   color: Colors.white,
                   onPressed: () {
-                    controller.declinedPurchaseOrder(controller.purchaseOrderApprovalList.value[index].id,);
+                    //controller.declinedPurchaseOrder(controller.purchaseOrderApprovalList.value[index].id,);
+                    showOptionsDialog();
                   },
                   child: Text(
                     labels?.cancel,
@@ -99,6 +113,67 @@ class _PurchaseOrderDetailsState extends State<PurchaseOrderDetails> {
         ],
       ),
     );
+  }
+  showOptionsDialog(){
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context, true);
+        controller.declinedPurchaseOrder(controller.purchaseOrderApprovalList.value[index].id,reject_controller.text);
+      },
+    );
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    int selectedRadio = 0;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+        title: Text("Reject Reason"),  
+        content: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var n in list)
+                  RadioListTile<String>(
+                    value: n,
+                    groupValue: reject_controller.text,
+                    onChanged: (val) {
+                      reject_controller.text = val;
+                      setState(() {});
+                    },
+                    title: Text(n),
+                    toggleable: true,
+                    selected: reject_controller.text == n,
+                  ),
+                reject_controller.text == 'Others' ? TextField(
+                      enabled: true,
+                      controller: reject_controller,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: (("Reject Reason")),
+                      ),
+                      onChanged: (text) {
+                        
+                      },
+                    ): Container()
+              ]),
+          );
+      },
+    ),
+    actions: [
+       okButton,
+       cancelButton
+    ],);
+      });
   }
 
   Widget purchaseOrderData(BuildContext context) {
@@ -433,3 +508,7 @@ class _PurchaseOrderDetailsState extends State<PurchaseOrderDetails> {
     );
   }
 }
+
+
+
+

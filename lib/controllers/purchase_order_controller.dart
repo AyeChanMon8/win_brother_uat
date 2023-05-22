@@ -72,7 +72,7 @@ class PurchaseOrderController extends GetxController {
     });
   }
 
-  declinedPurchaseOrder(int id) async {
+  declinedPurchaseOrder(int id, String reason) async {
     Future.delayed(
         Duration.zero,
         () => Get.dialog(
@@ -82,7 +82,7 @@ class PurchaseOrderController extends GetxController {
               size: 30.0,
             )),
             barrierDismissible: false));
-    await purchaseOrderService.cancelPurchaseOrder(id).then((data) {
+    await purchaseOrderService.cancelPurchaseOrder(id, reason.toString()).then((data) {
       Get.back();
       if(data){
         AppUtils.showConfirmDialog('Information', 'Successfully Declined!',(){

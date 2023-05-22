@@ -17,6 +17,7 @@ class PurchaseOrderApprovalResponse {
   Department_id department_id;
   bool state;
   List<OrderLine> order_line;
+  List<String> reject_reasons_list;
   PurchaseOrderApprovalResponse({
     this.id,
     this.name,
@@ -28,6 +29,7 @@ class PurchaseOrderApprovalResponse {
     this.department_id,
     this.state,
     this.order_line,
+    this.reject_reasons_list
   });
 
   PurchaseOrderApprovalResponse copyWith({
@@ -41,6 +43,7 @@ class PurchaseOrderApprovalResponse {
     Department_id department_id,
     bool state,
     List<OrderLine> order_line,
+    List<String> reject_reasons_list,
   }) {
     return PurchaseOrderApprovalResponse(
       id: id ?? this.id,
@@ -53,6 +56,7 @@ class PurchaseOrderApprovalResponse {
       department_id: department_id ?? this.department_id,
       state: state ?? this.state,
       order_line: order_line ?? this.order_line,
+      reject_reasons_list: reject_reasons_list ?? this.reject_reasons_list,
     );
   }
 
@@ -68,6 +72,7 @@ class PurchaseOrderApprovalResponse {
       'department_id': department_id?.toMap(),
       'state': state,
       'order_line': order_line?.map((x) => x?.toMap())?.toList(),
+      'reject_reasons_list': reject_reasons_list
     };
   }
 
@@ -85,6 +90,7 @@ class PurchaseOrderApprovalResponse {
       department_id: Department_id.fromMap(map['department_id']),
       state: map['state'],
       order_line: List<OrderLine>.from(map['order_line']?.map((x) => OrderLine.fromMap(x))),
+      reject_reasons_list: List<String>.from(map['reject_reasons_list']),
     );
   }
 
@@ -94,7 +100,7 @@ class PurchaseOrderApprovalResponse {
 
   @override
   String toString() {
-    return 'PurchaseOrderApprovalResponse(id: $id, name: $name, partner_name: $partner_name, amount_total: $amount_total, currency_id: $currency_id, company_id: $company_id, branch_id: $branch_id, department_id: $department_id, state: $state, order_line: $order_line)';
+    return 'PurchaseOrderApprovalResponse(id: $id, name: $name, partner_name: $partner_name, amount_total: $amount_total, currency_id: $currency_id, company_id: $company_id, branch_id: $branch_id, department_id: $department_id, state: $state, order_line: $order_line, reject_reasons_list: $reject_reasons_list)';
   }
 
   @override
@@ -111,7 +117,8 @@ class PurchaseOrderApprovalResponse {
       o.branch_id == branch_id &&
       o.department_id == department_id &&
       o.state == state &&
-      listEquals(o.order_line, order_line);
+      listEquals(o.order_line, order_line) &&
+      o.reject_reasons_list == reject_reasons_list;
   }
 
   @override
@@ -125,7 +132,8 @@ class PurchaseOrderApprovalResponse {
       branch_id.hashCode ^
       department_id.hashCode ^
       state.hashCode ^
-      order_line.hashCode;
+      order_line.hashCode ^
+      reject_reasons_list.hashCode;
   }
 }
 
