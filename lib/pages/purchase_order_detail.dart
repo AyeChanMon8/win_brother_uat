@@ -206,7 +206,13 @@ class _PurchaseOrderDetailsState extends State<PurchaseOrderDetails> {
                                         .order_line[ind]
                                         .categ_id
                                         .name !=
-                                    null
+                                    null && controller
+                                        .purchaseOrderApprovalList
+                                        .value[index]
+                                        .order_line[ind]
+                                        .categ_id
+                                        .name !=
+                                    false
                                 ? Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(

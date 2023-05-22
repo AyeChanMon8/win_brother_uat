@@ -829,18 +829,22 @@ class WayBill_Route_plan_ids {
   Route_id _routeId;
   dynamic _startActualDate;
   dynamic _endActualDate;
+  dynamic _status;
 
   dynamic get id => _id;
   Route_id get routeId => _routeId;
   dynamic get startActualDate => _startActualDate;
   dynamic get endActualDate => _endActualDate;
+  dynamic get status => _status;
+
 
   WayBill_Route_plan_ids({
-      dynamic id, Route_id routeId,dynamic startActualDate, dynamic endActualDate}){
+      dynamic id, Route_id routeId,dynamic startActualDate, dynamic endActualDate,dynamic status}){
     _id = id;
     _routeId = routeId;
     _startActualDate = startActualDate;
-    endActualDate = _endActualDate;
+    _endActualDate = endActualDate;
+    _status = status;
 }
 
   WayBill_Route_plan_ids.fromJson(dynamic json) {
@@ -848,6 +852,7 @@ class WayBill_Route_plan_ids {
     _routeId = json["route_id"] != null ? Route_id.fromJson(json["route_id"]) : null;
     _startActualDate = json["start_actual_date"];
     _endActualDate = json["end_actual_date"];
+    _status = json["status"];
   }
 
   Map<String, dynamic> toJson() {
@@ -858,7 +863,7 @@ class WayBill_Route_plan_ids {
     }
     map["start_actual_date"] = _startActualDate;
     map["end_actual_date"] = _endActualDate;
-
+    map['status'] = _status;
     return map;
   }
 

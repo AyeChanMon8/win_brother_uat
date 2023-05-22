@@ -1101,5 +1101,25 @@ class PlanTripController extends GetxController {
     super.onClose();
   }
 
-  
+  clickWayBillRouteLine(bool first_route, int trip_id, int route_id, int next_route_id) async {
+    Future.delayed(
+        Duration.zero,
+        () => Get.dialog(
+            Center(
+                child: SpinKitWave(
+              color: Color.fromRGBO(63, 51, 128, 1),
+              size: 30.0,
+            )),
+            barrierDismissible: false));
+    var created = 0;
+    await planTripServie
+        .clickWayBillRouteLineTrip(first_route, trip_id,route_id,next_route_id)
+        .then((data) {
+      if (data != 0) {
+        Get.back();
+        created =1;
+      }
+    });
+    return created;
+  }
 }
