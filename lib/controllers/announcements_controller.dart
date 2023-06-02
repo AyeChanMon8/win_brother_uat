@@ -11,6 +11,7 @@ import 'package:open_file/open_file.dart';
 import 'package:winbrother_hr_app/models/announcement.dart';
 import 'package:winbrother_hr_app/services/employee_service.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:winbrother_hr_app/utils/app_utils.dart';
 
 class AnnouncementsController extends GetxController {
   EmployeeService employeeService;
@@ -61,11 +62,21 @@ class AnnouncementsController extends GetxController {
             }
             update();
             Get.back();
+            suspensionEmployee();
       });
     } catch (error) {
+      suspensionEmployee();
       print(error);
       Get.snackbar("Error ", "Error , $error");
     }
+  }
+
+    void suspensionEmployee() async{
+    await employeeService.suspensionEmployee().then((value) {
+      if(value){
+        // AppUtils.showSuspendDialog('Warning!', "Please Logout! You are a suspended employee!");
+      }
+    });
   }
 
 

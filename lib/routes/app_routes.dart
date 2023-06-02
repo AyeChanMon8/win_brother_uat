@@ -97,6 +97,7 @@ abstract class Routes {
   static const APPROVED_EMPLOYEE_CHANGES_DETAILS = '/approved_employee_changes_details';
   static const EMPLOYEE_CHANGES_DETAILS = '/employee_changes_details';
   static const DOCUMENT_LIST = '/document_list';
+  static const APPROVAL_SUSPENSION_LIST = '/approval_suspension_list';
 
   static const APPROVAL_TRAVEL_DETAILS = '/approval_travel_details';
   static const APPROVED_TRAVEL_DETAILS = '/approved_travel_details';
@@ -135,5 +136,6 @@ abstract class Routes {
   static const OTPCONFIRM ='/otp_confirm';
   static const PURCHASE_ORDER_LIST = '/purchase_order_list';
   static const PURCHASE_ORDER_DETAIL = '/purchase_order_detail';
-
+  static const APPROVAL_SUSPENSION_DETAILS = '/approval_suspension_details';
+  static const APPROVED_SUSPENSION_DETAILS = '/approved_suspension_details';
 }

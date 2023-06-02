@@ -14,6 +14,7 @@ import 'package:winbrother_hr_app/models/overtime_request_response.dart';
 import 'package:winbrother_hr_app/models/overtime_response.dart';
 import 'package:winbrother_hr_app/models/remark.dart';
 import 'package:winbrother_hr_app/models/resignation.dart';
+import 'package:winbrother_hr_app/models/suspension.dart';
 import 'package:winbrother_hr_app/models/travel_expense/list/travel_list_model.dart';
 import 'package:winbrother_hr_app/models/travel_expense/out_of_pocket_response.dart';
 import 'package:winbrother_hr_app/models/trip_expense.dart';
@@ -66,7 +67,7 @@ class ApprovalController extends GetxController {
   var outofpocketExpenseApprovedList = List<OutofPocketResponse>().obs;
   var travelExpenseApprovedList = List<TravelExpenseList>().obs;
   var button_show = false;
-
+  var suspensionApprovalList = List<Suspension>().obs;
   var leave_approval_count = 0.obs;
   var travel_approval_count =0.obs;
   var route_approval_count =0.obs;
@@ -82,6 +83,9 @@ class ApprovalController extends GetxController {
   var announcement_approval_count = 0.obs;
   var tripExpenseToApproveList = List<TripExpense>().obs;
   var tripExpenseApprovedList = List<TripExpense>().obs;
+  var suspened_approval_count = 0.obs;
+  var suspendedApprovalList = List<Suspension>().obs;
+  var suspendedApprovedList = List<Suspension>().obs;
   final box = GetStorage();
   TextEditingController remarkController;
   TravelRequestService travelRequestService;
@@ -91,7 +95,8 @@ class ApprovalController extends GetxController {
   var show_attachment = false.obs;
   var showDetails = true.obs;
 
-
+  var suspension_approval_count =0.obs;
+  var suspensionApprovedList = List<Suspension>().obs;
   @override
   void onReady() async {
     super.onReady();
@@ -869,6 +874,32 @@ class ApprovalController extends GetxController {
       Get.back();
     });
   }
+  getSuspensionApprovedList() async {
+    Future.delayed(
+        Duration.zero,
+            () => Get.dialog(
+            Center(
+                child: SpinKitWave(
+                  color: Color.fromRGBO(63, 51, 128, 1),
+                  size: 30.0,
+                )),
+            barrierDismissible: false));
+
+    var employee_id = box.read('emp_id');
+    await travelService.getSuspensionApproved(employee_id,offset.toString()).then((data) {
+      if(offset!=0){
+        // update data and loading status
+        isLoading.value = false;
+        //resignationApprovedList.addAll(data);
+        data.forEach((element) {
+          suspensionApprovedList.add(element);
+        });
+      }else{
+        suspensionApprovedList.value = data;
+      }
+      Get.back();
+    });
+  }
   getEmployeeChangesFirstApprovalList() async {
     Future.delayed(
         Duration.zero,
@@ -1266,6 +1297,96 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
     });
   }
 
+  approveSuspension(int id,BuildContext context) async {
+    Future.delayed(
+        Duration.zero,
+            () => Get.dialog(
+            Center(
+                child: SpinKitWave(
+                  color: Color.fromRGBO(63, 51, 128, 1),
+                  size: 30.0,
+                )),
+            barrierDismissible: false));
+    await travelService.approveSuspension(id,context).then((data) async{
+      if(data == 1){
+         showConfirmSuspensionDialogApprove('Information', 'The employee to be suspended has a related user. Are you sure that you want to proceed?',id,context);
+        // await travelService.confirmSuspension(id).then((susData) {
+        //   if(susData){
+        //      Get.back();
+        //       AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+        //         var employee_id = box.read('emp_id');
+        //         suspension_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+        //         offset.value = 0;
+        //         getSuspensionApprovalList();
+        //         getSuspensionApprovedList();
+        //         Get.back();
+        //         Get.back();
+        //       });
+        //   }
+        // });
+      }else if(data == 2){
+        await travelService.confirmSuspension(id).then((susData) {
+          if(susData){
+             Get.back();
+              AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+                var employee_id = box.read('emp_id');
+                suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+                offset.value = 0;
+                getSuspensionApprovalList();
+                getSuspensionApprovedList();
+                Get.back();
+                Get.back();
+              });
+          }
+        });
+      }
+     
+    });
+  }
+
+  void showConfirmSuspensionDialogApprove(
+    String title,
+    String msg,
+    int id,
+    BuildContext context
+  ) {
+    final box = GetStorage();
+    int status = 0;
+    Get.defaultDialog(
+      barrierDismissible: false,
+      content: Text(msg),
+       actions: [
+          FlatButton(
+          child: Text('Yes', style: TextStyle(color: Colors.red)),
+          onPressed: () async{
+            await travelService.confirmSuspension(id).then((susData) {
+          if(susData){
+            Get.back();
+             Get.back();
+              AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+                var employee_id = box.read('emp_id');
+                suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+                offset.value = 0;
+                getSuspensionApprovalList();
+                getSuspensionApprovedList();
+                Get.back();
+                Get.back();
+              });
+          }
+        });
+          },
+          ),
+           FlatButton(
+          child: Text('No', style: TextStyle(color: Colors.red)),
+          onPressed: () {
+           Get.back();
+           Navigator.of(context).pop();
+          },
+          ),
+    ],
+    );
+  }
+
   declinedResignation(int id) async {
     await travelService.declineResigantion(id).then((data) {
       route_approve_show.value = false;
@@ -1275,6 +1396,20 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
         offset.value = 0;
         getResignationApprovalList();
         getResignationApprovedList();
+        Get.back();
+        Get.back();
+      });
+    });
+  }
+   declinedSuspension(int id) async {
+    await travelService.declineSuspension(id).then((data) {
+      route_approve_show.value = false;
+      AppUtils.showConfirmDialog('Information', 'Successfully Declined!',() async {
+        var employee_id = box.read('emp_id');
+        suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+        offset.value = 0;
+        getSuspensionApprovalList();
+        getSuspensionApprovedList();
         Get.back();
         Get.back();
       });
@@ -1375,6 +1510,7 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
     loan_approval_count.value =  await travelRequestService.getLoanToApproveCount(employee_id);
     resignation_approval_count.value =  await travelRequestService.getResignationToApproveCount(employee_id);
     employee_changes_approval_count.value =  await travelRequestService.getEmployeeChangesToApproveCount(employee_id);
+    suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
 
     var role = box.read('role_category');
     if (role == 'employee') {
@@ -1622,6 +1758,31 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
         tripExpenseApprovedList.value = data;
       }
       update();
+      Get.back();
+    });
+  }
+
+  getSuspensionApprovalList() async {
+    Future.delayed(
+        Duration.zero,
+            () => Get.dialog(
+            Center(
+                child: SpinKitWave(
+                  color: Color.fromRGBO(63, 51, 128, 1),
+                  size: 30.0,
+                )),
+            barrierDismissible: false));
+
+    var employee_id = box.read('emp_id');
+    await travelService.getSuspensionToApprove(employee_id,offset.toString()).then((data) {
+      if(offset!=0){
+        isLoading.value = false;
+        data.forEach((element) {
+          suspensionApprovalList.add(element);
+        });
+      }else{
+        suspensionApprovalList.value = data;
+      }
       Get.back();
     });
   }

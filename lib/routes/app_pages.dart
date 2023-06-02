@@ -27,6 +27,7 @@ import 'package:winbrother_hr_app/pages/approval_ot_list.dart';
 import 'package:winbrother_hr_app/pages/approval_page.dart';
 import 'package:winbrother_hr_app/pages/approval_resignation_details.dart';
 import 'package:winbrother_hr_app/pages/approval_route_details.dart';
+import 'package:winbrother_hr_app/pages/approval_suspension_details.dart';
 import 'package:winbrother_hr_app/pages/approval_travel_details.dart';
 import 'package:winbrother_hr_app/pages/approval_travel_list_page.dart';
 import 'package:winbrother_hr_app/pages/approved_employee_change_details.dart';
@@ -35,6 +36,7 @@ import 'package:winbrother_hr_app/pages/approved_leave_details.dart';
 import 'package:winbrother_hr_app/pages/approved_loan_details.dart';
 import 'package:winbrother_hr_app/pages/approved_resignation_details.dart';
 import 'package:winbrother_hr_app/pages/approved_route_details.dart';
+import 'package:winbrother_hr_app/pages/approved_suspension_details.dart';
 import 'package:winbrother_hr_app/pages/approved_travel_details.dart';
 import 'package:winbrother_hr_app/pages/approved_travel_list_page.dart';
 import 'package:winbrother_hr_app/pages/attendance_approval_list.dart';
@@ -129,6 +131,7 @@ import 'package:winbrother_hr_app/pages/reward_details_page.dart';
 import 'package:winbrother_hr_app/pages/reward_page.dart';
 import 'package:winbrother_hr_app/pages/route_approval_tabbar.dart';
 import 'package:winbrother_hr_app/pages/splash_page.dart';
+import 'package:winbrother_hr_app/pages/suspension_approval_tabbar.dart';
 import 'package:winbrother_hr_app/pages/travel_approval_tabbar.dart';
 import 'package:winbrother_hr_app/pages/travel_details.dart';
 import 'package:winbrother_hr_app/pages/travel_expense_page/travel_expense_approval_tabar.dart';
@@ -408,6 +411,15 @@ class AppPages {
     binding: PurchaseOrderBinding(), page: () => PurchaseOrderListPage()),
     GetPage(
         name: Routes.PURCHASE_ORDER_DETAIL, page: () => PurchaseOrderDetails()),
+    GetPage(
+        name: Routes.APPROVAL_SUSPENSION_LIST,
+        page: () => SuspensionApprovalTabBar()),
+    GetPage(
+        name: Routes.APPROVAL_SUSPENSION_DETAILS,
+        page: () => ApprovalSuspensionDetails()),
+    GetPage(
+        name: Routes.APPROVED_SUSPENSION_DETAILS,
+        page: () => ApprovedSuspensionDetails()),
 
 
   ];

@@ -76,29 +76,29 @@ class LoginController extends GetxController {
             checkRole(emp_id);
           }
         }
-        else {
+        // else {
 
-          Get.back();
-          await employeeService
-              .checkLogin(emailTextController.text, passwordTextController.text).then((value){
-            if (data.toString().isNotEmpty) {
-              if(data.toString()=="0"){
-                AppUtils.showToast('Wrong EmployeeID or Password!');
-              }else{
-                emp_id = data.toString();
-                //save to GetxStorage
-                box.write('emp_id', emp_id);
-                if(box.read('rememberme')??false) {
-                  box.write('username', emailTextController.text);
-                  box.write('password', passwordTextController.text);
-                }
-                checkRole(emp_id);
-              }
-            }else{
-                 Get.offAll(SplashPage());
-            }
-          });
-        }
+        //   Get.back();
+        //   await employeeService
+        //       .checkLogin(emailTextController.text, passwordTextController.text).then((value){
+        //     if (data.toString().isNotEmpty) {
+        //       if(data.toString()=="0"){
+        //         AppUtils.showToast('Wrong EmployeeID or Password!');
+        //       }else{
+        //         emp_id = data.toString();
+        //         //save to GetxStorage
+        //         box.write('emp_id', emp_id);
+        //         if(box.read('rememberme')??false) {
+        //           box.write('username', emailTextController.text);
+        //           box.write('password', passwordTextController.text);
+        //         }
+        //         checkRole(emp_id);
+        //       }
+        //     }else{
+        //          Get.offAll(SplashPage());
+        //     }
+        //   });
+        // }
       });
     }
   }

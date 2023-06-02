@@ -324,6 +324,13 @@ class AppUtils {
       final endIndex = errorMessage.indexOf(end, startIndex + start.length);
       error_message = errorMessage.substring(startIndex + start.length, endIndex); // brown fox jumps
       AppUtils.showDialog('Warning', error_message);
+    }else if(errorMessage.contains("Warning('") && errorMessage.contains("')")){
+      const start = "Warning('";
+      const end = "')";
+      final startIndex = errorMessage.indexOf(start);
+      final endIndex = errorMessage.indexOf(end, startIndex + start.length);
+      error_message = errorMessage.substring(startIndex + start.length, endIndex); // brown fox jumps
+      AppUtils.showDialog('Warning', error_message);
     }else if(errorMessage.contains('ERROR: ValidationError(\\"') && errorMessage.contains("!")){
       const start = 'ERROR: ValidationError(\\"';
       const end = "!";
@@ -358,5 +365,28 @@ class AppUtils {
     }
 
     return formatted_date;
+  }
+  
+  static void  showSuspendDialog(
+    String title,
+    String msg,
+  ) {
+    final box = GetStorage();
+    Get.defaultDialog(
+      barrierDismissible: false,
+      title: title,
+      content: Text(msg),
+       actions: [
+          FlatButton(
+          child: Text('Yes', style: TextStyle(color: Colors.red)),
+          onPressed: () {
+            // box.write('emp_image',"");
+            // OneSignal.shared.removeExternalUserId();
+            // Get.offAllNamed(Routes.LOGIN);
+            Get.offAllNamed(Routes.LOGIN);
+          },
+          ),
+    ],
+    );
   }
 }

@@ -55,9 +55,9 @@ class ForgetPasswordController extends GetxController {
           {"emp_id": barcode}]);
         });
       }
-      else {
-        AppUtils.showDialog('Information!', 'Not Success!');
-      }
+      // else {
+      //   AppUtils.showDialog('Information!', 'Not Success!');
+      // }
     });
   }
 

@@ -2,6 +2,9 @@
 
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:io' as Io;
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:winbrother_hr_app/constants/globals.dart';
@@ -11,6 +14,7 @@ import 'package:winbrother_hr_app/models/expense_attachment.dart';
 import 'package:winbrother_hr_app/models/loan.dart';
 import 'package:winbrother_hr_app/models/outof_pocket_update.dart';
 import 'package:winbrother_hr_app/models/resignation.dart';
+import 'package:winbrother_hr_app/models/suspension.dart';
 import 'package:winbrother_hr_app/models/travel_expense.dart';
 import 'package:winbrother_hr_app/models/travel_expense/create/out_of_pocket_expnese_line.dart';
 import 'package:winbrother_hr_app/models/travel_expense/create/travel_line_model.dart';
@@ -29,6 +33,7 @@ import 'package:winbrother_hr_app/models/travel_line.dart';
 import 'package:winbrother_hr_app/models/travel_request.dart';
 import 'package:winbrother_hr_app/models/travel_request_list_response.dart';
 import 'package:winbrother_hr_app/models/trip_expense.dart';
+import 'package:winbrother_hr_app/routes/app_pages.dart';
 import 'package:winbrother_hr_app/services/odoo_service.dart';
 import 'package:winbrother_hr_app/utils/app_utils.dart';
 import 'package:get/get.dart' hide Response;
@@ -268,6 +273,13 @@ class TravelRequestService extends OdooService {
     Response response = await dioClient.put(url,data: jsonEncode({"employee_id":int.tryParse(empID)}));
     return response.data;
   }
+
+  Future<int> getSuspensionToApproveCount(String empID) async{
+    String url = Globals.baseURL +"/hr.employee/2/approval_suspension_count";
+    Response response = await dioClient.put(url,data: jsonEncode({"employee_id":int.tryParse(empID)}));
+    return response.data;
+  }
+
   Future<int> getEmployeeChangesToApproveCount(String empID) async{
     String url = Globals.baseURL +"/hr.employee/2/approval_employee_changes_count";
     Response response = await dioClient.put(url,data: jsonEncode({"employee_id":int.tryParse(empID)}));
@@ -897,6 +909,89 @@ class TravelRequestService extends OdooService {
     return result;
   }
 
+  Future<int> approveSuspension(int id,BuildContext context) async {
+    var result = 0;
+    String url = Globals.baseURL +
+        "/hr.suspension/"+id.toString()+"/approve_suspension_mobile";
+    Response response = await dioClient.put(url);
+
+    if (response.statusCode == 200) {
+      if(response.data['status'] == 1){
+         result =  1;
+        //  result = showConfirmSuspensionDialog(response.data['message'].toString(),response.statusCode.toString(), id,context);
+      }
+      else{
+        result = 2;
+      }
+    } else {
+      result = 0;
+    }
+    return result;
+  }
+
+  Future<bool> showConfirmSuspensionDialog(
+    String title,
+    String msg,
+    int id,
+    BuildContext context
+  ) {
+    bool result = false;
+    final box = GetStorage();
+    Get.defaultDialog(
+      barrierDismissible: false,
+      content: Text(title),
+       actions: [
+          FlatButton(
+          child: Text('Yes', style: TextStyle(color: Colors.red)),
+          onPressed: () {
+            Navigator.of(context).pop();
+            Get.back();
+            // confirmSuspensionDialog(id);
+            result = true;
+            return result;
+          },
+          ),
+           FlatButton(
+          child: Text('No', style: TextStyle(color: Colors.red)),
+          onPressed: () {
+            Navigator.of(context).pop();
+            return result;
+          },
+          ),
+    ],
+    );
+  }
+
+
+  Future<bool> confirmSuspension(int id) async {
+    var result;
+    String url = Globals.baseURL +
+        "/hr.suspension/"+id.toString()+"/proceed_approve_suspension";
+    Response response = await dioClient.put(url);
+
+    if (response.statusCode == 200) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
+  }
+
+   void confirmSuspensionDialog(int id) async {
+    var result;
+    String url = Globals.baseURL +
+        "/hr.suspension/"+id.toString()+"/proceed_approve_suspension";
+    Response response = await dioClient.put(url);
+
+    if (response.statusCode == 200) {
+        AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+          Get.toNamed(Routes.APPROVAL_SUSPENSION_LIST);
+          Get.back();
+          Get.back();
+        });
+    } 
+  }
+
   Future<bool> requestAdvanceTravel(int id) async {
     var result;
     String url = Globals.baseURL +
@@ -1013,6 +1108,20 @@ class TravelRequestService extends OdooService {
     }
     return result;
   }
+  Future<bool> declineSuspension(int id) async {
+    var result;
+    String url =
+        Globals.baseURL + "/hr.suspension/"+id.toString()+"/reject_suspension";
+
+    Response response = await dioClient.put(url);
+
+    if (response.statusCode == 200) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
+  }
   Future<int> getTravelRequestToApproveCount(String empID) async{
     String url = Globals.baseURL +"/hr.employee/2/approval_travel_requests_count";
     Response response = await dioClient.put(url, data: jsonEncode({'employee_id':int.tryParse(empID)}));
@@ -1110,6 +1219,29 @@ class TravelRequestService extends OdooService {
     return loan_list;
   }
 
+  Future<List<Suspension>> getSuspensionToApprove(
+      String empID,String offset) async {
+    List<dynamic> suspension_ids = await getSuspensionIDsList(empID);
+    String filter = "[('id','in'," + suspension_ids.toString() + ")]";
+    String url = Globals.baseURL + "/hr.suspension?filters=[('id','in'," + suspension_ids.toString() + ")]&limit="+Globals.pag_limit.toString()+"&offset="+offset;
+    Response response =
+    await dioClient.get(url);
+
+    List<Suspension> suspension_list =
+    new List<Suspension>();
+
+    if (response.statusCode == 200) {
+      var list = response.data['results'];
+
+      if (response.data['count'] > 0) {
+        list.forEach((v) {
+          suspension_list.add(Suspension.fromJson(v));
+        });
+      }
+    }
+    return suspension_list;
+  }
+
   Future<List<Resignation>> getResignationApproved(
       String empID,String offset) async {
     List<dynamic> resignation_ids = await getResignationApprovedIDsList(empID);
@@ -1131,6 +1263,28 @@ class TravelRequestService extends OdooService {
       }
     }
     return loan_list;
+  }
+  Future<List<Suspension>> getSuspensionApproved(
+      String empID,String offset) async {
+    List<dynamic> suspension_ids = await getSuspensionApprovedIDsList(empID);
+    String filter = "[('id','in'," + suspension_ids.toString() + ")]";
+    String url = Globals.baseURL + "/hr.suspension?filters=[('id','in'," + suspension_ids.toString() + ")]&limit="+Globals.pag_limit.toString()+"&offset="+offset;
+    Response response =
+    await dioClient.get(url);
+
+    List<Suspension> suspension_list =
+    new List<Suspension>();
+
+    if (response.statusCode == 200) {
+      var list = response.data['results'];
+
+      if (response.data['count'] > 0) {
+        list.forEach((v) {
+          suspension_list.add(Suspension.fromJson(v));
+        });
+      }
+    }
+    return suspension_list;
   }
 
   Future<List<Employee_promotion>> getEmployeeChangesFirstToApprove(
@@ -1348,6 +1502,15 @@ print("secondApproval $response");
     List<dynamic> travel_ids = response.data;
     return travel_ids;
   }
+
+  getSuspensionIDsList(String empID) async {
+    var empid = int.tryParse(empID);
+    String url = Globals.baseURL + "/hr.employee/2/approval_suspension";
+    Response response = await dioClient.put(url,
+        data: jsonEncode({'employee_id': empid}));
+    List<dynamic> suspension_ids = response.data;
+    return suspension_ids;
+  }
   getResignationApprovedIDsList(String empID) async {
     var empid = int.tryParse(empID);
     String url = Globals.baseURL + "/hr.employee/2/approved_resignation";
@@ -1355,6 +1518,14 @@ print("secondApproval $response");
         data: jsonEncode({'employee_id': empid}));
     List<dynamic> travel_ids = response.data;
     return travel_ids;
+  }
+   getSuspensionApprovedIDsList(String empID) async {
+    var empid = int.tryParse(empID);
+    String url = Globals.baseURL + "/hr.employee/2/approved_suspension";
+    Response response = await dioClient.put(url,
+        data: jsonEncode({'employee_id': empid}));
+    List<dynamic> suspension_ids = response.data;
+    return suspension_ids;
   }
   getEmployeeChangesIDsfistApprovalList(String empID) async {
     var empid = int.tryParse(empID);

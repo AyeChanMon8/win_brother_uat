@@ -74,6 +74,8 @@ class EmployeeService extends OdooService {
         empID = response.data['employee_id'].toString();
       }
     } else {
+      Get.back();
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
       print('login info status${response.statusCode}');
     }
 
@@ -1220,4 +1222,24 @@ class EmployeeService extends OdooService {
     return result;
   }
 
+  Future<bool> suspensionEmployee() async{
+    var employee_id = box.read('emp_id');
+    String url = Globals.baseURL + "/hr.employee/1/suspension_employee";
+    bool result = false;
+    Response response =
+        await dioClient.put(url, data: jsonEncode({"employee_id": int.parse(employee_id)}));
+    if (response.statusCode == 200) {
+      if(response.data['status']){
+          Get.back();
+          AppUtils.showSuspendDialog('Warning!',response.data['message'].toString());
+      }else{
+          result = response.data['status'];
+      }
+    }else{
+      Get.back();
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
+    }
+    return result;
+
+  }
 }

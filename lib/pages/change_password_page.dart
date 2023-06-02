@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:winbrother_hr_app/controllers/change_password_controller.dart';
 import 'package:winbrother_hr_app/localization.dart';
 
@@ -27,7 +28,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool _obscureText2 = true;
 
   bool _obscureText3 = true;
-
+  final box = GetStorage();
   toggle1() {
     setState(() {
       _obscureText1 = !_obscureText1;
@@ -51,7 +52,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     final labels = AppLocalizations.of(context);
     final _formKey = GlobalKey<FormState>();
     emp_id = Get.arguments;
-    controller.employeeIDController.text = emp_id;
+    if(emp_id!=null && emp_id!=""){
+      controller.employeeIDController.text = emp_id;
+    }else{
+      controller.employeeIDController.text = box.read('emp_id');
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(labels?.changePassword),

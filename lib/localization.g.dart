@@ -527,7 +527,13 @@ class AppLocalizations {
         purchaseOrder : "Purchase Order",
         purchaseOrderDetail: "Purchase Order Details",
         received: "Received",
-        subTotal: "Subtotal"),
+        subTotal: "Subtotal",
+        suspension: "Suspension",
+        suspensionApproval: "Suspension Approval",
+        suspensionDetails: "Supension Details",
+        joiningDate: "Joining Date",
+        submittedDate: "Submitted Date"
+        ),
     // Locale.fromSubtags(languageCode: "my"): AppLocalizations_Labels(
     //     employeeID: "ဝန်ထမ်း ID",
     //     password: "စကားဝှက်",
@@ -1546,7 +1552,12 @@ class AppLocalizations {
         purchaseOrder : "Purchase Order",
         purchaseOrderDetail: "Purchase Order Details",
         received: "Received",
-        subTotal: "Subtotal"
+        subTotal: "Subtotal",
+        suspension: "Suspension",
+        suspensionApproval: "Suspension Approval",
+        suspensionDetails: "Supension Details",
+        joiningDate: "Joining Date",
+        submittedDate: "Submitted Date",
 ),
   };
 
@@ -2575,7 +2586,11 @@ class AppLocalizations_Labels {
     this.purchaseOrderDetail,
     this.received,
     this.subTotal,
-
+    this.suspensionApproval,
+    this.suspensionDetails,
+    this.suspension,
+    this.joiningDate,
+    this.submittedDate,
   });
 
   final String employeeID;
@@ -3536,8 +3551,11 @@ class AppLocalizations_Labels {
   final String purchaseOrderDetail;
   final String received;
   final String subTotal;
-
-
+  final String suspensionApproval;
+  final String suspensionDetails;
+  final String suspension;
+  final String joiningDate;
+  final String submittedDate;
   String getByKey(String key) {
     switch (key) {
       case 'employeeID':
@@ -4402,6 +4420,16 @@ class AppLocalizations_Labels {
         return received;
       case 'subTotal':
         return subTotal;
+      case 'suspensionApproval':
+        return suspensionApproval;
+      case 'suspensionDetails':
+        return suspensionDetails;
+      case 'suspension':
+        return suspension;
+      case 'joiningDate':
+        return joiningDate;
+      case 'submittedDate':
+        return submittedDate;
       default:
         return '';
     }
