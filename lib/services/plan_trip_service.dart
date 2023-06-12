@@ -584,4 +584,21 @@ class PlanTripServie extends OdooService {
     return created;
   }
 
+  Future<int> clickProductRouteLineTrip(bool first_route, int tripID, int route_id, int next_route_id) async {
+    String process_datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+    var created = 0;
+    String url =
+        Globals.baseURL + "/plan.trip.product/1/update_route_status";
+    Response response = await dioClient.put(url,
+    data: jsonEncode({'first_route':first_route, 'trip_id': tripID, 'route_id': route_id, 'next_route_id': next_route_id,'process_datetime': process_datetime}));
+    if (response.statusCode == 200) {
+      created = 1;
+    }else{
+      Get.back();
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
+    }
+
+    return created;
+  }
+
 }

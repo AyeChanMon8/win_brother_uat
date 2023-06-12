@@ -738,24 +738,44 @@ class Route_expense_id {
 /// route_id : {"id":14,"name":"Yangon - Mandalay"}
 
 class Route_plan_ids {
+  dynamic _id;
   Route_id _routeId;
+  dynamic _startActualDate;
+  dynamic _endActualDate;
+  dynamic _status;
 
+  dynamic get id => _id;
   Route_id get routeId => _routeId;
+  dynamic get startActualDate => _startActualDate;
+  dynamic get endActualDate => _endActualDate;
+  dynamic get status => _status;
 
   Route_plan_ids({
       Route_id routeId}){
+    _id = id;
     _routeId = routeId;
+    _startActualDate = startActualDate;
+    _endActualDate = endActualDate;
+    _status = status;
 }
 
   Route_plan_ids.fromJson(dynamic json) {
+    _id = json["id"];
     _routeId = json["route_id"] != null ? Route_id.fromJson(json["route_id"]) : null;
+    _startActualDate = json["start_actual_date"];
+    _endActualDate = json["end_actual_date"];
+    _status = json["status"];
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
+     var map = <String, dynamic>{};
+    map["id"] = _id;
     if (_routeId != null) {
       map["route_id"] = _routeId.toJson();
     }
+    map["start_actual_date"] = _startActualDate;
+    map["end_actual_date"] = _endActualDate;
+    map['status'] = _status;
     return map;
   }
 

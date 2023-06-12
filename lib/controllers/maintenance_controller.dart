@@ -148,10 +148,11 @@ void createMaintenanceRequest() async{
           maintenanceList.value = data;
           Get.back();
           Get.back();
-      }else{
-        Get.back();
-        Get.back();
       }
+      // else{
+      //   Get.back();
+      //   Get.back();
+      // }
     });
   }
 

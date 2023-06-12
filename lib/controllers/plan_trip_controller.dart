@@ -78,6 +78,7 @@ class PlanTripController extends GetxController {
   var offset = 0.obs;
   var waybill_isLoading = false.obs;
   var waybill_offset = 0.obs;
+  var product_offset = 0.obs;
   var current_page = 'open'.obs;
   var selectedExpensePlanTripProductImage = "";
   var selectedExpensePlanTripWayBillImage = "";
@@ -1122,4 +1123,74 @@ class PlanTripController extends GetxController {
     });
     return created;
   }
+
+  clickProductRouteLine(bool first_route, int trip_id, int route_id, int next_route_id) async {
+    Future.delayed(
+        Duration.zero,
+        () => Get.dialog(
+            Center(
+                child: SpinKitWave(
+              color: Color.fromRGBO(63, 51, 128, 1),
+              size: 30.0,
+            )),
+            barrierDismissible: false));
+    var created = 0;
+    await planTripServie
+        .clickProductRouteLineTrip(first_route, trip_id,route_id,next_route_id)
+        .then((data) {
+      if (data != 0) {
+        Get.back();
+        created =1;
+      }
+    });
+    return created;
+  }
+
+  Future<void> getPlantripWithProductList(String state) async {
+    this.planTripServie = await PlanTripServie().init();
+    Future.delayed(
+        Duration.zero,
+        () => Get.dialog(
+            Center(
+                child: SpinKitWave(
+              color: Color.fromRGBO(63, 51, 128, 1),
+              size: 30.0,
+            )),
+            barrierDismissible: false));
+    //fetch emp_id from GetX Storage
+    var employee_id = box.read('emp_id');
+
+    await planTripServie
+        .getPlanTripWithProductList(
+            int.tryParse(employee_id), product_offset.toString(), state)
+        .then((data) {
+      plantrip_with_product_list.value.clear();
+      if (product_offset != 0) {
+        // update data and loading status
+        waybill_isLoading.value = false;
+        //plantrip_with_waybill_list.addAll(data);
+        print("Data: ${product_offset.toString()}");
+
+        data.forEach((element) {
+          plantrip_with_product_list.add(element);
+        });
+      } else {
+        plantrip_with_product_list.value = data;
+        //plantrip_with_waybill_list.addAll(data);
+      }
+      update();
+       if(state == 'running'){
+      //   log('plantrip_with_waybill_list length => ${plantrip_with_waybill_list.length}');
+      //   arg_index.value = plantrip_with_waybill_list.length - 1;
+      //   log('arg_index => $arg_index');
+      //   // recalculate
+        if(plantrip_with_waybill_list!=null && plantrip_with_waybill_list.length>0){
+          calculateTotalExpense(plantrip_with_waybill_list[arg_index.value].expenseIds);
+        }
+        //calculateTotalExpense(plantrip_with_waybill_list[arg_index.value].expenseIds);
+       }
+      Get.back();
+    });
+  }
+
 }

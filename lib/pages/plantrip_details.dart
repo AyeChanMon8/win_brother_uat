@@ -42,6 +42,8 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
   var isDriver = false;
   var is_spare = false;
   var is_branch_manager = false;
+  var plantrip_product_list_lines = [];
+  var next_route_id = 0;
   @override
   void initState() {
     isDriver = box.read("is_driver");
@@ -96,8 +98,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
 
   Widget routeContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
-    return Container(
-        child: Stack(
+    return Column(
       children: [
         Row(
           children: [
@@ -110,319 +111,406 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 30, right: 0, left: 0),
+          padding: const EdgeInsets.only(top: 2, right: 0, left: 0),
           child: Divider(
             height: 1,
             thickness: 1,
             color: backgroundIconColor,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 20),
+        //   child: routeListWidget(context),
+        // ),
+        controller.plantrip_with_product_list.value[controller.arg_index.value].state == 'running' && isDriver ? Padding(
+          padding: const EdgeInsets.only(top: 10.0),
           child: routeListWidget(context),
-        ),
-      ],
-    ));
+        ): SizedBox(),
+        controller.plantrip_with_product_list.value[controller.arg_index.value].state == 'running' && (isDriver || is_spare) ?Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: tripRouteListWidget(context),
+        ):SizedBox(),
+      ],);
+  }
+
+  Widget tripRouteListWidget(BuildContext context) {
+    
+    int fields;
+    return Container(
+      
+      child: Obx(() {
+        
+        return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds.length,
+        itemBuilder: (BuildContext context, int index1) {
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        width: 80,
+                        child: Text(controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].routeId.name
+                            .toString()
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                    flex: 3,
+                    child: Container(
+                        margin: EdgeInsets.only(left: 10, right: 10),
+                        child: Theme(
+                          data: new ThemeData(
+                            primaryColor: textFieldTapColor,
+                          ),
+                          child: controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].startActualDate!=null ? Text(controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].startActualDate): SizedBox(),
+                        )),
+                  ),
+                   Expanded(
+                    flex: 3,
+                    child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Theme(
+                          data: new ThemeData(
+                            primaryColor: textFieldTapColor,
+                          ),
+                          child: controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].endActualDate!=null ? Text(controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].endActualDate): Expanded(child: Container(
+                            margin: EdgeInsets.only(right: 10),
+                          )),
+                        )),
+                  ),
+                  controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].status!=null ?Expanded(
+                    flex: 3,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child:  Text(controller.plantrip_with_product_list[controller.arg_index.value].routePlanIds[index1].status),
+                    ),
+                  ): Expanded(
+                    flex: 3,
+                    child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                  )),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                thickness: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          );
+        },
+      );}),
+    );
   }
 
   Widget productContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
-    return Container(
-        child: Column(
+    return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.name,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.uom,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.quantity,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              controller.plantrip_with_product_list[arg_index].state ==
-                      'running'
-                  ? Expanded(flex: 1, child: SizedBox())
-                  : SizedBox(),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: backgroundIconColor,
-          ),
-        ),
-        controller.plantrip_with_product_list[arg_index].productIds.length > 0
-            ? Expanded(
-              child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: productListWidget(context),
-                ),
-            )
-            : new Container(),
+    Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.name,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.uom,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.quantity,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          controller.plantrip_with_product_list[arg_index].state ==
+                  'running'
+              ? Expanded(flex: 1, child: SizedBox())
+              : SizedBox(),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: backgroundIconColor,
+      ),
+    ),
+    controller.plantrip_with_product_list[arg_index].productIds.length > 0
+        ? Expanded(
+          child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: productListWidget(context),
+            ),
+        )
+        : new Container(),
       ],
-    ));
+    );
   }
 
   Widget advanceContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
-    return Container(
-        child: Column(
+    return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 2,
-                  child: Text(
-                    labels.expenseCategory,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text(
-                      labels.quantity,
-                      style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                    ),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text(
-                      labels.amount,
-                      style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                    ),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text(
-                      labels.remark,
-                      style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                    ),
-                  )),
-              controller.plantrip_with_product_list[arg_index].state == "close"
-                  ? SizedBox()
-                  : Expanded(flex: 1, child: SizedBox()),
-              Expanded(flex: 1, child: SizedBox()),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: backgroundIconColor,
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: advnaceListWidget(context),
-          ),
-        ),
-        controller.plantrip_with_product_list[arg_index].state == 'submit' ||
-                controller.plantrip_with_product_list[arg_index].state ==
-                        'open' &&
-                    isDriver == true||is_spare == true &&
-                    is_branch_manager == false
-            ? Align(
-              alignment:Alignment.topRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  var itemAdvanceTotal = 0.0;
+    Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: Text(
+                labels.expenseCategory,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  labels.quantity,
+                  style: TextStyle(color: backgroundIconColor,fontSize: 11),
+                ),
+              )),
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  labels.amount,
+                  style: TextStyle(color: backgroundIconColor,fontSize: 11),
+                ),
+              )),
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  labels.remark,
+                  style: TextStyle(color: backgroundIconColor,fontSize: 11),
+                ),
+              )),
+          controller.plantrip_with_product_list[arg_index].state == "close"
+              ? SizedBox()
+              : Expanded(flex: 1, child: SizedBox()),
+          Expanded(flex: 1, child: SizedBox()),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: backgroundIconColor,
+      ),
+    ),
+    Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: advnaceListWidget(context),
+      ),
+    ),
+    controller.plantrip_with_product_list[arg_index].state == 'submit' ||
+            controller.plantrip_with_product_list[arg_index].state ==
+                    'open' &&
+                isDriver == true||is_spare == true &&
+                is_branch_manager == false
+        ? Align(
+          alignment:Alignment.topRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              var itemAdvanceTotal = 0.0;
+              controller.plantrip_with_product_list[arg_index]
+                  .requestAllowanceLines
+                  .forEach((element) {
+                itemAdvanceTotal += element.totalAmount;
+              });
+              Get.to(AddAdvancePage(
+                      "PlanTripProduct",
+                      controller.plantrip_id,
+                      controller.plantrip_with_product_list[arg_index]
+                          .totalAdvance,
+                      itemAdvanceTotal))
+                  .then((value) {
+                //controller.getPlantripList(controller.current_page.value);
+                if (value != null) {
+                  DayTripPlanTripGeneralController day_trip_controller =
+                      Get.find();
                   controller.plantrip_with_product_list[arg_index]
                       .requestAllowanceLines
-                      .forEach((element) {
-                    itemAdvanceTotal += element.totalAmount;
-                  });
-                  Get.to(AddAdvancePage(
-                          "PlanTripProduct",
-                          controller.plantrip_id,
-                          controller.plantrip_with_product_list[arg_index]
-                              .totalAdvance,
-                          itemAdvanceTotal))
-                      .then((value) {
-                    //controller.getPlantripList(controller.current_page.value);
-                    if (value != null) {
-                      DayTripPlanTripGeneralController day_trip_controller =
-                          Get.find();
-                      controller.plantrip_with_product_list[arg_index]
-                          .requestAllowanceLines
-                          .add(Request_allowance_lines(
-                              id: value,
-                              expenseCategId: Expense_categ_id(
-                                  id: day_trip_controller
-                                      .selectedExpenseCategory.id,
-                                  name: day_trip_controller
-                                      .selectedExpenseCategory.displayName),
-                              quantity: double.tryParse(day_trip_controller
-                                  .quantityTextController.text),
-                              amount: double.tryParse(day_trip_controller
-                                  .amountTextController.text),
-                              totalAmount: double.tryParse(day_trip_controller
-                                  .totalAmountController.text),
-                              remark: day_trip_controller.remarkTextController.text));
-                    }
-                  });
-                },
-                mini: true,
-                child: Icon(Icons.add),
-              ),
-            )
-            : new Container(),
+                      .add(Request_allowance_lines(
+                          id: value,
+                          expenseCategId: Expense_categ_id(
+                              id: day_trip_controller
+                                  .selectedExpenseCategory.id,
+                              name: day_trip_controller
+                                  .selectedExpenseCategory.displayName),
+                          quantity: double.tryParse(day_trip_controller
+                              .quantityTextController.text),
+                          amount: double.tryParse(day_trip_controller
+                              .amountTextController.text),
+                          totalAmount: double.tryParse(day_trip_controller
+                              .totalAmountController.text),
+                          remark: day_trip_controller.remarkTextController.text));
+                }
+              });
+            },
+            mini: true,
+            child: Icon(Icons.add),
+          ),
+        )
+        : new Container(),
       ],
-    ));
+    );
   }
 
   Widget expenseContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
 
-    return Container(
-        child: Column(
+    return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 2,
-                  child: Text(
-                    labels.route,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Text(
-                    labels.routeExpense,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.stdAmt,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.actualAmt,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.overAmt,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              controller.plantrip_with_product_list[arg_index].state == "close"
-                  ? SizedBox()
-                  : Expanded(child: SizedBox()),
-              controller.plantrip_with_product_list[arg_index].state ==
-                          'running' &&
-                      isDriver == true ||is_spare == true&&
-                      is_branch_manager == false
-                  ? Expanded(child: SizedBox())
-                  : SizedBox(),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: backgroundIconColor,
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: expenseWidget(context),
-          ),
-        ),
-        SizedBox(height: 20,),
-        Padding(
-          padding: const EdgeInsets.only(top:10.0),
-          child: Row(
-            children: [
-              Expanded(
-                flex:1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left:5.0),
-                  child: Text(labels.totalStdAmt+' : '),
-                ),
-              ),
-              Expanded(
-                flex:1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left:5.0),
-                  child: Text(labels.totalActualAmt+' : '),
-                ),
-              ),
-              Expanded(
-                flex:1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left:5.0),
-                  child: Text(labels.totalOverAmt+' : '),
-                ),
-              ),
-             // Obx(()=>Text(AppUtils.addThousnadSperator(controller.expenseStandardAmount.value))),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top:10.0),
-          child: Row(
-            children: [
-              Obx(()=> Expanded(
-                flex:1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left:5.0),
-                  child: Text(AppUtils.addThousnadSperator(controller.expenseStandardAmount.value)),
-                ),
+    Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: Text(
+                labels.route,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
               )),
-              Obx(()=> Expanded(
-                flex:1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left:5.0),
-                  child: Text(AppUtils.addThousnadSperator(controller.expenseActualAmount.value)),
-                ),
+          Expanded(
+              flex: 2,
+              child: Text(
+                labels.routeExpense,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
               )),
-              Obx(()=> Expanded(
-                flex:1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left:5.0),
-                  child: Text(AppUtils.addThousnadSperator(controller.expenseOverAmount.value)),
-                ),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.stdAmt,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
               )),
-            ],
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.actualAmt,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.overAmt,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          controller.plantrip_with_product_list[arg_index].state == "close"
+              ? SizedBox()
+              : Expanded(child: SizedBox()),
+          controller.plantrip_with_product_list[arg_index].state ==
+                      'running' &&
+                  isDriver == true ||is_spare == true&&
+                  is_branch_manager == false
+              ? Expanded(child: SizedBox())
+              : SizedBox(),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: backgroundIconColor,
+      ),
+    ),
+    Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: expenseWidget(context),
+      ),
+    ),
+    SizedBox(height: 20,),
+    Padding(
+      padding: const EdgeInsets.only(top:10.0),
+      child: Row(
+        children: [
+          Expanded(
+            flex:1,
+            child: Padding(
+              padding: const EdgeInsets.only(left:5.0),
+              child: Text(labels.totalStdAmt+' : '),
+            ),
           ),
-        ),
-
+          Expanded(
+            flex:1,
+            child: Padding(
+              padding: const EdgeInsets.only(left:5.0),
+              child: Text(labels.totalActualAmt+' : '),
+            ),
+          ),
+          Expanded(
+            flex:1,
+            child: Padding(
+              padding: const EdgeInsets.only(left:5.0),
+              child: Text(labels.totalOverAmt+' : '),
+            ),
+          ),
+         // Obx(()=>Text(AppUtils.addThousnadSperator(controller.expenseStandardAmount.value))),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top:10.0),
+      child: Row(
+        children: [
+          Obx(()=> Expanded(
+            flex:1,
+            child: Padding(
+              padding: const EdgeInsets.only(left:5.0),
+              child: Text(AppUtils.addThousnadSperator(controller.expenseStandardAmount.value)),
+            ),
+          )),
+          Obx(()=> Expanded(
+            flex:1,
+            child: Padding(
+              padding: const EdgeInsets.only(left:5.0),
+              child: Text(AppUtils.addThousnadSperator(controller.expenseActualAmount.value)),
+            ),
+          )),
+          Obx(()=> Expanded(
+            flex:1,
+            child: Padding(
+              padding: const EdgeInsets.only(left:5.0),
+              child: Text(AppUtils.addThousnadSperator(controller.expenseOverAmount.value)),
+            ),
+          )),
+        ],
+      ),
+    ),
+    
       ],
-    ));
+    );
   }
 
   Widget expenseViewContainer(BuildContext context) {
@@ -483,7 +571,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
   Widget fuelInContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
 
-    return Container(
+    return Expanded(
         child: Column(
       children: [
         Padding(
@@ -596,7 +684,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
   Widget consumptionContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
 
-    return Container(
+    return Expanded(
         child: Column(
       children: [
         Padding(
@@ -679,7 +767,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
   }
 
   Widget wayBillContainer(BuildContext context) {
-    return Container(
+    return Expanded(
         child: Column(
       children: [
         Padding(
@@ -703,12 +791,12 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
             color: backgroundIconColor,
           ),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: routeListWidget(context),
-          ),
-        ),
+        // Expanded(
+        //   child: Padding(
+        //     padding: const EdgeInsets.only(top: 10),
+        //     child: routeListWidget(context),
+        //   ),
+        // ),
       
       ],
     ));
@@ -739,10 +827,11 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
         title: Text(labels?.planTrip),
         actions: [],
       ),
-      body: Container(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         padding: EdgeInsets.only(right: 10, left: 10, top: 10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // AutoSizeText(planTripModel.totalAdvance.toString(),style: DetailtitleStyle(),),
             Container(
@@ -854,10 +943,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  AutoSizeText(
-                                    '${to_date}',
-                                    style: maintitleStyle(),
-                                  )
+                                  AutoSizeText('${AppUtils.changeDefaultDateTimeFormat(controller.plantrip_with_product_list[controller.arg_index.value].toDatetime)}',style: maintitleStyle(),)
                                 ],
                               )),
                         ],
@@ -996,7 +1082,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                       ),
                       //Divider(thickness: 1,),
                       SizedBox(height: 15),
-                      routeContainer(context),
+                      controller.plantrip_with_product_list.value[controller.arg_index.value].state == 'running' ?routeContainer(context): SizedBox(),
                     ],
                   ):SizedBox()),
                 ],
@@ -1063,7 +1149,8 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                   ],
                 )),
             // tab bar view here
-            Expanded(
+            Container(
+              height: 350,
                 child: controller.plantrip_with_product_list[arg_index].state ==
                     'open'
                     ? TabBarView(
@@ -1112,7 +1199,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                   flex: 1,
                   child: Padding(
                     padding:
-                    const EdgeInsets.only(left: 15.0, bottom: 15),
+                    const EdgeInsets.only(left: 5.0, bottom: 15),
                     child: GFButton(
                       color: textFieldTapColor,
                       onPressed: () {
@@ -1128,7 +1215,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                   flex: 1,
                   child: Padding(
                     padding:
-                    const EdgeInsets.only(left: 15.0, bottom: 15),
+                    const EdgeInsets.only(left: 5.0, bottom: 15),
                     child: GFButton(
                       type: GFButtonType.outline,
                       color: textFieldTapColor,
@@ -1146,6 +1233,7 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                 : new Container(),
 
           ],
+        
         ),
       ),
     );
@@ -1300,53 +1388,48 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
           Expanded(
             flex: 2,
             child: Container(
-              // color: Colors.white,
-              // height: 50,
-              // margin: EdgeInsets.only(right: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[350], width: 2),
-                  // Border.all(color: Colors.white, width: 2),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(1),
-                  ),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[350], width: 2),
+                // Border.all(color: Colors.white, width: 2),
+                borderRadius: const BorderRadius.all(
+                  const Radius.circular(1),
                 ),
-                child: Theme(
-                  data: new ThemeData(
-                    primaryColor: Color.fromRGBO(60, 47, 126, 1),
-                    primaryColorDark: Color.fromRGBO(60, 47, 126, 1),
-                  ),
-                  child: Obx(
-                    () => DropdownButtonHideUnderline(
-                      child: DropdownButton<BaseRoute>(
-                          hint: Container(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                "Choose Route",
-                              )),
-                          value: controller.selectedBaseRoute,
-                          icon: Icon(Icons.keyboard_arrow_down),
-                          iconSize: 30,
-                          isExpanded: true,
-                          onChanged: (BaseRoute value) {
-                            controller.onChangeRouteCategoryDropdown(value);
-                          },
-                          items:
-                              controller.base_route_list.map((BaseRoute route) {
-                            return DropdownMenuItem<BaseRoute>(
-                              value: route,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: route.name != null
-                                    ? Text(
-                                        route.name,
-                                        style: TextStyle(),
-                                      )
-                                    : Text(''),
-                              ),
-                            );
-                          }).toList()),
-                    ),
+              ),
+              child: Theme(
+                data: new ThemeData(
+                  primaryColor: Color.fromRGBO(60, 47, 126, 1),
+                  primaryColorDark: Color.fromRGBO(60, 47, 126, 1),
+                ),
+                child: Obx(
+                  () => DropdownButtonHideUnderline(
+                    child: DropdownButton<BaseRoute>(
+                        hint: Container(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              "Choose Route",
+                            )),
+                        value: controller.selectedBaseRoute,
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        iconSize: 30,
+                        isExpanded: true,
+                        onChanged: (BaseRoute value) {
+                          controller.onChangeRouteCategoryDropdown(value);
+                        },
+                        items:
+                            controller.base_route_list.map((BaseRoute route) {
+                          return DropdownMenuItem<BaseRoute>(
+                            value: route,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: route.name != null
+                                  ? Text(
+                                      route.name,
+                                      style: TextStyle(),
+                                    )
+                                  : Text(''),
+                            ),
+                          );
+                        }).toList()),
                   ),
                 ),
               ),
@@ -1555,44 +1638,136 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
     );
   }
 
+  // Widget routeListWidget(BuildContext context) {
+  //   int fields;
+  //   return Container(
+  //      margin: EdgeInsets.only(top: 20),
+  //     child: Obx(() => ListView.builder(
+  //           shrinkWrap: true,
+  //           //physics: NeverScrollableScrollPhysics(),
+  //           itemCount: controller
+  //               .plantrip_with_product_list[arg_index].routePlanIds.length,
+  //           // itemCount: controller.route_plan_ids_list.length,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             return Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Container(
+  //                   child: Container(
+  //                     // width: 80,
+  //                     child: Text(controller
+  //                         .plantrip_with_product_list[arg_index]
+  //                         .routePlanIds[index]
+  //                         .routeId
+  //                         .name
+  //                         .toString()),
+  //                   ),
+  //                 ),
+  //                 SizedBox(
+  //                   height: 3,
+  //                 ),
+  //                 Divider(
+  //                   thickness: 1,
+  //                 ),
+  //                 SizedBox(
+  //                   height: 3,
+  //                 ),
+  //               ],
+  //             );
+  //           },
+  //         )),
+  //   );
+  // }
+
   Widget routeListWidget(BuildContext context) {
+    
     int fields;
+    bool first_route = false;
+    print(controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds);
     return Container(
-       margin: EdgeInsets.only(top: 20),
-      child: Obx(() => ListView.builder(
-            shrinkWrap: true,
-            //physics: NeverScrollableScrollPhysics(),
-            itemCount: controller
-                .plantrip_with_product_list[arg_index].routePlanIds.length,
-            // itemCount: controller.route_plan_ids_list.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
+      
+      child: Obx(() {
+        plantrip_product_list_lines = [];
+        next_route_id = 0;
+          for(var i=0; i< controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds.length; i++){
+            if(i == 0 && (controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i].status == '' || controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i].status == null)){
+              first_route = true;
+            }else{
+              first_route = false;
+            }
+            if((controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i].status == '' || controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i].status == null || controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i].status == 'running') || (((controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds.length-1) == i) && controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i].status == 'end')){
+              plantrip_product_list_lines.add(controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i]);
+              if(i != controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds.length-1){
+                  next_route_id = controller.plantrip_with_product_list.value[controller.arg_index.value].routePlanIds[i+1].id;
+              }
+              break;
+            }
+        }
+        
+        return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: plantrip_product_list_lines.length,
+        itemBuilder: (BuildContext context, int index) {
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Text(plantrip_product_list_lines[index].routeId.name
+                            .toString()
+                        ),
+                      ),
+                    ),
+                  Expanded(
                     child: Container(
-                      // width: 80,
-                      child: Text(controller
-                          .plantrip_with_product_list[arg_index]
-                          .routePlanIds[index]
-                          .routeId
-                          .name
-                          .toString()),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: plantrip_product_list_lines[index].status!=null && plantrip_product_list_lines[index].status!='' ? Text(plantrip_product_list_lines[index].status): SizedBox(),
                     ),
                   ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Divider(
-                    thickness: 1,
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                ],
-              );
-            },
-          )),
+                  plantrip_product_list_lines[index].status == '' || plantrip_product_list_lines[index].status == null || plantrip_product_list_lines[index].status=='running' ? Expanded(child: SizedBox(
+                    width: 50,
+                    child: GFButton(
+                      onPressed: () {
+                        controller.clickProductRouteLine(first_route, controller.plantrip_with_product_list.value[controller.arg_index.value].id, plantrip_product_list_lines[index].id,next_route_id).then((value){
+                          if(value!=0){
+                            controller.getPlantripWithProductList(controller.current_page.value);
+                          }
+                        });
+                      },
+                      type: GFButtonType.outline,
+                      text: 'Click',
+                      textColor: textFieldTapColor,
+                      blockButton: true,
+                      size: GFSize.SMALL,
+                      color: textFieldTapColor,
+                    ),),):SizedBox(),
+                  (plantrip_product_list_lines[index].status == 'end' && index == plantrip_product_list_lines.length-1) ? Expanded(child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Text('Done')
+                  ),):SizedBox(),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                thickness: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          );
+        },
+      );}),
     );
   }
 
@@ -2677,51 +2852,46 @@ class _ExpenseCreateState extends State<ExpenseCreate> {
           Expanded(
             flex: 2,
             child: Container(
-              // color: Colors.white,
-              // height: 50,
-              // margin: EdgeInsets.only(right: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[350], width: 2),
-                  // Border.all(color: Colors.white, width: 2),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(1),
-                  ),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[350], width: 2),
+                // Border.all(color: Colors.white, width: 2),
+                borderRadius: const BorderRadius.all(
+                  const Radius.circular(1),
                 ),
-                child: Theme(
-                  data: new ThemeData(
-                    primaryColor: Color.fromRGBO(60, 47, 126, 1),
-                    primaryColorDark: Color.fromRGBO(60, 47, 126, 1),
-                  ),
-                  child: Obx(
-                    () => DropdownButtonHideUnderline(
-                      child: DropdownButton<Expense_ids>(
-                          hint: Container(
-                              padding: EdgeInsets.only(left: 20),
+              ),
+              child: Theme(
+                data: new ThemeData(
+                  primaryColor: Color.fromRGBO(60, 47, 126, 1),
+                  primaryColorDark: Color.fromRGBO(60, 47, 126, 1),
+                ),
+                child: Obx(
+                  () => DropdownButtonHideUnderline(
+                    child: DropdownButton<Expense_ids>(
+                        hint: Container(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              "Expense Category",
+                            )),
+                        value: controller.selectedExpenseRouteCategory,
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        iconSize: 30,
+                        isExpanded: true,
+                        onChanged: (Expense_ids value) {
+                          controller.onChangeRouteExpenseDropdown(value);
+                        },
+                        items: controller.expense_list
+                            .map((Expense_ids category) {
+                          return DropdownMenuItem<Expense_ids>(
+                            value: category,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
                               child: Text(
-                                "Expense Category",
-                              )),
-                          value: controller.selectedExpenseRouteCategory,
-                          icon: Icon(Icons.keyboard_arrow_down),
-                          iconSize: 30,
-                          isExpanded: true,
-                          onChanged: (Expense_ids value) {
-                            controller.onChangeRouteExpenseDropdown(value);
-                          },
-                          items: controller.expense_list
-                              .map((Expense_ids category) {
-                            return DropdownMenuItem<Expense_ids>(
-                              value: category,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(
-                                  category.routeExpenseId.name,
-                                  style: TextStyle(),
-                                ),
+                                category.routeExpenseId.name,
+                                style: TextStyle(),
                               ),
-                            );
-                          }).toList()),
-                    ),
+                            ),
+                          );
+                        }).toList()),
                   ),
                 ),
               ),
@@ -2922,6 +3092,7 @@ class _ExpenseCreateState extends State<ExpenseCreate> {
             ],
           ),
         ),
+      
       ),
     );
   }
