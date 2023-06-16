@@ -206,6 +206,9 @@ class MaintenanceService extends OdooService{
       //       maintenanceRequestModelList.add(Maintenance_request_model.fromJson(v));
       //     });
       // }
+    }else{
+      Get.back();
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
     }
     return maintenanceRequestModelList;
   }
@@ -224,6 +227,9 @@ class MaintenanceService extends OdooService{
       //       maintenanceRequestModelList.add(Maintenance_request_model.fromJson(v));
       //     });
       // }
+    }else{
+      Get.back();
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
     }
     return maintenanceRequestModelList;
   }

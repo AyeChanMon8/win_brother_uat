@@ -55,7 +55,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     if(emp_id!=null && emp_id!=""){
       controller.employeeIDController.text = emp_id;
     }else{
-      controller.employeeIDController.text = box.read('emp_id');
+      controller.employeeIDController.text = box.read('login_employee_id');
     }
     
     return Scaffold(

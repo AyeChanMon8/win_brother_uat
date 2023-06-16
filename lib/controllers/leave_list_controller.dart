@@ -102,12 +102,14 @@ class LeaveListController extends GetxController {
             )),
             barrierDismissible: false));
     await leaveService.approveLeave(id).then((data) {
-      Get.back();
-      button_approve_show.value = false;
-      offset.value = 0;
-      _getLeaveList();
-      // AppUtils.showDialog('Information', 'Successfully Click Approve');
-      Get.offNamed(Routes.LEAVE_TRIP_TAB_BAR);
+      if(data){
+        Get.back();
+        button_approve_show.value = false;
+        offset.value = 0;
+        _getLeaveList();
+        // AppUtils.showDialog('Information', 'Successfully Click Approve');
+        Get.offNamed(Routes.LEAVE_TRIP_TAB_BAR);
+      }
     });
   }
 
@@ -178,10 +180,13 @@ class LeaveListController extends GetxController {
             )),
             barrierDismissible: false));
     await leaveService.cancelLeave(id).then((data) {
-      Get.back();
-      button_approve_show.value = false;
-      offset.value = 0;
-      _getLeaveList();
+      if(data){
+        Get.back();
+        button_approve_show.value = false;
+        offset.value = 0;
+        _getLeaveList();
+      }
+      
       //Get.offNamed(Routes.LEAVE_TRIP_TAB_BAR);
     });
   }

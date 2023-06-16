@@ -345,11 +345,17 @@ class EmployeeService extends OdooService {
   }
 
   Future<bool> changePassword(String emp_id, String new_pwd) async {
+    String login_emp_id = "";
+    if(emp_id!=null && emp_id!=""){
+      login_emp_id = emp_id;
+    }else{
+      login_emp_id = box.read('login_employee_id');
+    }
     String url = Globals.baseURL + "/hr.employee/1/change_password";
     bool result = false;
     Response response = await dioClient.put(url,
         data: jsonEncode(
-            {"employee_id": emp_id, "new_pwd": new_pwd}));
+            {"employee_id": login_emp_id, "new_pwd": new_pwd}));
     if (response.statusCode == 200) {
       print(response.data.toString());
       result = response.data;

@@ -69,6 +69,7 @@ class LoginController extends GetxController {
             emp_id = data.toString();
             //save to GetxStorage
             box.write('emp_id', emp_id);
+            box.write('login_employee_id', emailTextController.text);
             if(box.read('rememberme')??false) {
               box.write('username', emailTextController.text);
               box.write('password', passwordTextController.text);

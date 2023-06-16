@@ -1105,6 +1105,7 @@ class TravelRequestService extends OdooService {
       result = true;
     } else {
       result = false;
+      AppUtils.showErrorDialog(response.toString(),response.statusCode.toString());
     }
     return result;
   }

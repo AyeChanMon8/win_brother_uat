@@ -237,9 +237,14 @@ void approveMaintenance(int id) async{
           barrierDismissible: false));
   var employee_id = box.read('emp_id');
   await maintenanceService.approveMaintenance(employee_id,id,current_page.value).then((data) {
-    maintenanceList.value = data;
-    Get.back();
-    Get.back();
+    if(data!=null && data.length > 0){
+      Get.back();
+      AppUtils.showConfirmDialog('Information', "Successfully Approved!",() async {
+      maintenanceList.value = data;
+      Get.back();
+      Get.back();
+      });
+    };
   });
 }
 void rejectMaintenance(int id) async{
@@ -254,9 +259,17 @@ void rejectMaintenance(int id) async{
           barrierDismissible: false));
   var employee_id = box.read('emp_id');
   await maintenanceService.rejectMaintenance(employee_id,id,current_page.value).then((data) {
-    maintenanceList.value = data;
-    Get.back();
-    Get.back();
+     if(data!=null && data.length > 0){
+      Get.back();
+      AppUtils.showConfirmDialog('Information', "Successfully Declined!",() async {
+      maintenanceList.value = data;
+      Get.back();
+      Get.back();
+      });
+    };
+    // maintenanceList.value = data;
+    // Get.back();
+    // Get.back();
   });
 }
 void secondApprove(int id) async{

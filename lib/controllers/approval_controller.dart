@@ -367,6 +367,7 @@ class ApprovalController extends GetxController {
 
     var employee_id = box.read('emp_id');
     await leaveService.getLeaveToApprove(employee_id,offset.toString()).then((value) {
+      leave_approve_show.value = true;
       if(offset!=0){
           // update data and loading status
           isLoading.value = false;
@@ -728,18 +729,20 @@ class ApprovalController extends GetxController {
             )),
             barrierDismissible: false));
     await leaveService.cancelLeave(id).then((data) {
-      offset.value = 0;
-      getLeaveApprovalList();
-      getLeaveApprovedList();
-      print(data);
-      Get.back();
+      if(data){
       leave_approve_show.value = false;
       AppUtils.showConfirmDialog('Information', 'Successfully Declined!',() async {
         var employee_id = box.read('emp_id');
         leave_approval_count.value = await leaveService.getLeaveToApproveCount(employee_id);
+        offset.value = 0;
+        getLeaveApprovalList();
+        getLeaveApprovedList();
+        Get.back();
         Get.back();
         Get.back();
       });
+      }
+      
     });
   }
 
@@ -1389,7 +1392,8 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
 
   declinedResignation(int id) async {
     await travelService.declineResigantion(id).then((data) {
-      route_approve_show.value = false;
+      if(data){
+route_approve_show.value = false;
       AppUtils.showConfirmDialog('Information', 'Successfully Declined!',() async {
         var employee_id = box.read('emp_id');
         resignation_approval_count.value =  await travelRequestService.getResignationToApproveCount(employee_id);
@@ -1399,6 +1403,7 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
         Get.back();
         Get.back();
       });
+      }
     });
   }
    declinedSuspension(int id) async {
