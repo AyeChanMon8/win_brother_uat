@@ -499,28 +499,34 @@ class PlanTripServie extends OdooService {
     return created;
   }
 
-  Future<int> deleteFuelConsumption(int advance_line_id) async {
+  Future<int> deleteFuelConsumption(int advance_line_id,int trip_id) async {
     var created = 0;
-    String url = Globals.baseURL +
-        "/trip.fuel.consumption/" +
-        advance_line_id.toString();
-    Response response = await dioClient.delete(url);
+    // String url = Globals.baseURL +
+    //     "/trip.fuel.consumption/" +
+    //     advance_line_id.toString();
+    // Response response = await dioClient.delete(url);
+    String url = Globals.baseURL + "/day.plan.trip/1/delete_fuel_consumption_line";
+    Response response = await dioClient.put(url,data: jsonEncode({'trip_id':trip_id, 'line_id': advance_line_id}));
     if (response.statusCode == 200) {
-      if (response.data != null) {
-        created = 1;
-      }
+      // if (response.data != null) {
+      //   created = 1;
+      // }
+      created = 1;
     }
     return created;
   }
 
   Future<int> deleteFuelIn(int line_id) async {
     var created = 0;
-    String url = Globals.baseURL + "/trip.fuel.in/" + line_id.toString();
-    Response response = await dioClient.delete(url);
+    // String url = Globals.baseURL + "/trip.fuel.in/" + line_id.toString(); 
+    // Response response = await dioClient.delete(url);
+    String url = Globals.baseURL + "/day.plan.trip/1/delete_fuel_in_line";
+    Response response = await dioClient.put(url,data: jsonEncode({'line_id': line_id}));
     if (response.statusCode == 200) {
-      if (response.data != null) {
-        created = 1;
-      }
+      // if (response.data != null) {
+      //   created = 1;
+      // }
+      created = 1;
     }
     return created;
   }

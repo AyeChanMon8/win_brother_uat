@@ -1224,7 +1224,7 @@ class _CreateDayTripState extends State<CreateDayTrip> with SingleTickerProvider
                           child: IconButton(
                             icon: Icon(Icons.delete),
                             onPressed: () {
-                              daytrip_controller.deleteConsumptionLine(daytrip_controller.dayTripList[arg_index].consumption_ids[index].id);
+                              daytrip_controller.deleteConsumptionLine(daytrip_controller.dayTripList[arg_index].consumption_ids[index].id,daytrip_controller.dayTripList[arg_index].id);
                             },
                           )):SizedBox(),
 
@@ -1730,7 +1730,7 @@ class _CreateDayTripState extends State<CreateDayTrip> with SingleTickerProvider
                 child: consumptionListWidget(context),
               ),
             ),
-            daytrip_controller.dayTripList[arg_index].state == 'running'&&isDriver==true||is_spare==true&&is_branch_manager==false?
+            daytrip_controller.dayTripList[arg_index].state == 'running'&& (isDriver==true||is_spare==true)&&is_branch_manager==false?
             Align(
               alignment:Alignment.topRight,
               child: FloatingActionButton(onPressed: (){

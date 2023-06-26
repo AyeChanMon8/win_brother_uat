@@ -1316,8 +1316,10 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
                                           controller
                                               .plantrip_with_product_list[
                                                   arg_index]
-                                              .consumptionIds[index]
-                                              .id);
+                                              .consumptionIds[index] 
+                                              .id,controller
+                                              .plantrip_with_product_list[
+                                                  arg_index].id);
                                 },
                               )):SizedBox(),
                         controller.plantrip_with_product_list[arg_index]

@@ -92,7 +92,7 @@ class DayTripController extends GetxController{
     });
 
   }
-  deleteConsumptionLine(int lineID) async {
+  deleteConsumptionLine(int lineID,int trip_id) async {
     Future.delayed(
         Duration.zero,
             () => Get.dialog(
@@ -102,7 +102,7 @@ class DayTripController extends GetxController{
                   size: 30.0,
                 )),
             barrierDismissible: false));
-    await dayTripServie.deleteConsumptionLine(lineID).then((data) {
+    await dayTripServie.deleteConsumptionLine(lineID,trip_id).then((data) {
       getDayTripList(current_page.value);
       Get.back();
       if (data != 0) {

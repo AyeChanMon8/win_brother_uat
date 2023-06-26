@@ -882,7 +882,7 @@ class _PlanTripWayBillDetailsState extends State<PlanTripWayBillDetails> with Si
                 child: fuelConsumptionsListWidget(context),
               ),
             ),
-            controller.plantrip_with_waybill_list.value[controller.arg_index.value].state=='running'&&isDriver==true||is_spare==true&&is_branch_manager==false?
+            controller.plantrip_with_waybill_list.value[controller.arg_index.value].state=='running'&&(isDriver==true||is_spare==true)&&is_branch_manager==false?
             Align(
               alignment: Alignment.topRight,
               child: FloatingActionButton(onPressed: (){
@@ -1596,7 +1596,7 @@ class _PlanTripWayBillDetailsState extends State<PlanTripWayBillDetails> with Si
                         child: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            controller.deletePlantripWaybillConsumptionLine(controller.plantrip_with_waybill_list[controller.arg_index.value].consumptionIds[index].id);
+                            controller.deletePlantripWaybillConsumptionLine(controller.plantrip_with_waybill_list[controller.arg_index.value].consumptionIds[index].id,controller.plantrip_with_waybill_list[controller.arg_index.value].id);
                           },
                         )):SizedBox(),
                     controller.plantrip_with_waybill_list[controller.arg_index.value].state=='running'&&isDriver==true||is_spare==true&&is_branch_manager==false? Expanded(

@@ -909,7 +909,7 @@ class PlanTripController extends GetxController {
     });
   }
 
-  deletePlantripProuctConsumptionLine(int lineID) async {
+  deletePlantripProuctConsumptionLine(int lineID,int trip_id) async {
     Future.delayed(
         Duration.zero,
         () => Get.dialog(
@@ -919,7 +919,7 @@ class PlanTripController extends GetxController {
               size: 30.0,
             )),
             barrierDismissible: false));
-    await planTripServie.deleteFuelConsumption(lineID).then((data) {
+    await planTripServie.deleteFuelConsumption(lineID,trip_id).then((data) {
       getPlantripList(current_page.value);
       Get.back();
       if (data != 0) {
@@ -934,7 +934,7 @@ class PlanTripController extends GetxController {
     });
   }
 
-  deletePlantripWaybillConsumptionLine(int lineID) async {
+  deletePlantripWaybillConsumptionLine(int lineID,int trip_id) async {
     Future.delayed(
         Duration.zero,
         () => Get.dialog(
@@ -944,7 +944,7 @@ class PlanTripController extends GetxController {
               size: 30.0,
             )),
             barrierDismissible: false));
-    await planTripServie.deleteFuelConsumption(lineID).then((data) {
+    await planTripServie.deleteFuelConsumption(lineID,trip_id).then((data) {
       getPlantripWithWayBillList(current_page.value);
       Get.back();
       if (data != 0) {
