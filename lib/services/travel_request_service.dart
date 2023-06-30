@@ -963,11 +963,11 @@ class TravelRequestService extends OdooService {
   }
 
 
-  Future<bool> confirmSuspension(int id) async {
+  Future<bool> confirmSuspension(int id,bool status) async {
     var result;
     String url = Globals.baseURL +
-        "/hr.suspension/"+id.toString()+"/proceed_approve_suspension";
-    Response response = await dioClient.put(url);
+        "/hr.suspension/"+id.toString()+"/proceed_approve_suspension_mobile";
+    Response response = await dioClient.put(url, data: jsonEncode({'compute_pay': status}));
 
     if (response.statusCode == 200) {
       result = true;
@@ -977,20 +977,20 @@ class TravelRequestService extends OdooService {
     return result;
   }
 
-   void confirmSuspensionDialog(int id) async {
-    var result;
-    String url = Globals.baseURL +
-        "/hr.suspension/"+id.toString()+"/proceed_approve_suspension";
-    Response response = await dioClient.put(url);
+  //  void confirmSuspensionDialog(int id) async {
+  //   var result;
+  //   String url = Globals.baseURL +
+  //       "/hr.suspension/"+id.toString()+"/proceed_approve_suspension";
+  //   Response response = await dioClient.put(url);
 
-    if (response.statusCode == 200) {
-        AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
-          Get.toNamed(Routes.APPROVAL_SUSPENSION_LIST);
-          Get.back();
-          Get.back();
-        });
-    } 
-  }
+  //   if (response.statusCode == 200) {
+  //       AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+  //         Get.toNamed(Routes.APPROVAL_SUSPENSION_LIST);
+  //         Get.back();
+  //         Get.back();
+  //       });
+  //   } 
+  // }
 
   Future<bool> requestAdvanceTravel(int id) async {
     var result;

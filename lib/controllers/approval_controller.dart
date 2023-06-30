@@ -1328,20 +1328,21 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
         //   }
         // });
       }else if(data == 2){
-        await travelService.confirmSuspension(id).then((susData) {
-          if(susData){
-             Get.back();
-              AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
-                var employee_id = box.read('emp_id');
-                suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
-                offset.value = 0;
-                getSuspensionApprovalList();
-                getSuspensionApprovedList();
-                Get.back();
-                Get.back();
-              });
-          }
-        });
+        determine_compute_payslip(context,id);
+        // await travelService.confirmSuspension(id).then((susData) {
+        //   if(susData){
+        //      Get.back();
+        //       AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+        //         var employee_id = box.read('emp_id');
+        //         suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+        //         offset.value = 0;
+        //         getSuspensionApprovalList();
+        //         getSuspensionApprovedList();
+        //         Get.back();
+        //         Get.back();
+        //       });
+        //   }
+        // });
       }
      
     });
@@ -1362,7 +1363,50 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
           FlatButton(
           child: Text('Yes', style: TextStyle(color: Colors.red)),
           onPressed: () async{
-            await travelService.confirmSuspension(id).then((susData) {
+            Navigator.of(context).pop();
+            determine_compute_payslip(context,id);
+        //     await travelService.confirmSuspension(id).then((susData) {
+        //   if(susData){
+        //     Get.back();
+        //      Get.back();
+        //       AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+        //         var employee_id = box.read('emp_id');
+        //         suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+        //         offset.value = 0;
+        //         getSuspensionApprovalList();
+        //         getSuspensionApprovedList();
+        //         Get.back();
+        //         Get.back();
+        //       });
+        //   }
+        // });
+          },
+          ),
+           FlatButton(
+          child: Text('No', style: TextStyle(color: Colors.red)),
+          onPressed: () {
+           Get.back();
+           Navigator.of(context).pop();
+          },
+          ),
+    ],
+    );
+  }
+
+  void determine_compute_payslip(
+    BuildContext context,
+    int id
+  ) {
+    final box = GetStorage();
+    int status = 0;
+    Get.defaultDialog(
+      barrierDismissible: false,
+      content: Text("Do you want to compute pay for this employee during suspension?"),
+       actions: [
+          FlatButton(
+          child: Text('Yes', style: TextStyle(color: Colors.red)),
+          onPressed: () async{
+            await travelService.confirmSuspension(id,true).then((susData) {
           if(susData){
             Get.back();
              Get.back();
@@ -1381,9 +1425,22 @@ AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
           ),
            FlatButton(
           child: Text('No', style: TextStyle(color: Colors.red)),
-          onPressed: () {
-           Get.back();
-           Navigator.of(context).pop();
+          onPressed: () async{
+           await travelService.confirmSuspension(id,false).then((susData) {
+          if(susData){
+            Get.back();
+             Get.back();
+              AppUtils.showConfirmDialog('Information', 'Successfully Approved!',() async {
+                var employee_id = box.read('emp_id');
+                suspened_approval_count.value =  await travelRequestService.getSuspensionToApproveCount(employee_id);
+                offset.value = 0;
+                getSuspensionApprovalList();
+                getSuspensionApprovedList();
+                Get.back();
+                Get.back();
+              });
+          }
+        });
           },
           ),
     ],
