@@ -43,9 +43,9 @@ class OvertimeDetails extends StatelessWidget {
               height: 20,
             ),
             dataWidget(context),
-            Obx(() => controller.otList[index].state == 'draft'
+            Obx(() => controller.otList.length > 0 ? (controller.otList[index].state == 'draft'
                     ? overtimeSubmitButton(context)
-                    : new Container()),
+                    : new Container()): SizedBox()) ,
             // if (controller.button_show == true) overtimeButton(context),
           ],
         ),
