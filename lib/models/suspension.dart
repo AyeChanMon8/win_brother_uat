@@ -11,6 +11,8 @@ class Suspension {
   String _suspension_submit_date;
   Employee_id _company_id;
   Employee_id _branch_id;
+  Job_id _job_id;
+  Job_grade_id _job_grade_id;
 
   int get id => _id;
   String get name => _name;
@@ -22,6 +24,8 @@ class Suspension {
   String get approvedRevealingDate => _approvedRevealingDate;
   Employee_id get company_id => _company_id;
   Employee_id get branch_id => _branch_id;
+  Job_id get job_id => _job_id;
+  Job_grade_id get job_grade_id => _job_grade_id;
 
   Suspension({
       int id,
@@ -32,7 +36,10 @@ class Suspension {
       String suspension_reason,
       dynamic joinedDate,
       String approvedRevealingDate,
-      String suspension_submit_date}){
+      String suspension_submit_date,
+      Job_id job_id,
+      Job_grade_id job_grade_id,
+      }){
     _id = id;
     _name = name;
     _employeeId = employeeId;
@@ -41,6 +48,8 @@ class Suspension {
     _joinedDate = joinedDate;
     _approvedRevealingDate = approvedRevealingDate;
     _suspension_submit_date = suspension_submit_date;
+    _job_id = job_id;
+    _job_grade_id = job_grade_id;
 }
 
   Suspension.fromJson(dynamic json) {
@@ -54,6 +63,8 @@ class Suspension {
     _suspension_submit_date = json["suspension_submit_date"];
     _company_id = json["company_id"] != null ? Employee_id.fromJson(json["company_id"]) : null;
     _branch_id = json["branch_id"] != null ? Employee_id.fromJson(json["branch_id"]) : null;
+    _job_id = json["job_id"] != null ? Job_id.fromJson(json["job_id"]) : null;
+    _job_grade_id = json["job_grade_id"] != null ? Job_grade_id.fromJson(json["job_grade_id"]) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +81,12 @@ class Suspension {
     map["joined_date"] = _joinedDate;
     map["approved_revealing_date"] = _approvedRevealingDate;
     map["suspension_submit_date"] = _suspension_submit_date;
+    if (_job_id != null) {
+      map["job_id"] = _job_id?.toJson();
+    }
+    if (_job_grade_id != null) {
+      map["job_grade_id"] = _job_grade_id?.toJson();
+    }
     return map;
   }
 
@@ -93,6 +110,62 @@ class Department_id {
 }
 
   Department_id.fromJson(dynamic json) {
+    _id = json["id"];
+    _name = json["name"];
+  }
+
+  Map<String, dynamic> toJson() {
+    var map = <String, dynamic>{};
+    map["id"] = _id;
+    map["name"] = _name;
+    return map;
+  }
+
+}
+
+class Job_grade_id {
+  int _id;
+  String _name;
+
+  int get id => _id;
+  String get name => _name;
+
+  Job_grade_id({
+      int id, 
+      String name}){
+    _id = id;
+    _name = name;
+}
+
+  Job_grade_id.fromJson(dynamic json) {
+    _id = json["id"];
+    _name = json["name"];
+  }
+
+  Map<String, dynamic> toJson() {
+    var map = <String, dynamic>{};
+    map["id"] = _id;
+    map["name"] = _name;
+    return map;
+  }
+
+}
+
+class Job_id {
+  int _id;
+  String _name;
+
+  int get id => _id;
+  String get name => _name;
+
+  Job_id({
+      int id,
+      String name}){
+    _id = id;
+    _name = name;
+}
+
+  Job_id.fromJson(dynamic json) {
     _id = json["id"];
     _name = json["name"];
   }

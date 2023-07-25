@@ -109,38 +109,7 @@ class _ApprovedSuspensionDetailsState extends State<ApprovedSuspensionDetails> {
                 Divider(
                   thickness: 1,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          labels.department,
-                          // ("position"),
-                          style: datalistStyle(),
-                        ),
-                      ),
-                      Obx(
-                            () => Container(
-                          child: controller.suspensionApprovedList.value[index].departmentId !=
-                              null
-                              ? Text(
-                            controller.suspensionApprovedList.value[index].departmentId.name,
-                            style: subtitleStyle(),
-                          )
-                              : Text('-'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Divider(
-                  thickness: 1,
-                ),
+                
                 SizedBox(
                   height: 10,
                 ),
@@ -188,6 +157,104 @@ class _ApprovedSuspensionDetailsState extends State<ApprovedSuspensionDetails> {
                                 padding: const EdgeInsets.only(left:50.0),
                                 child: Text(
                                   AppUtils.removeNullString(controller.suspensionApprovedList.value[index].branch_id.name),
+                                  style: subtitleStyle(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 1,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Text(
+                          labels.department,
+                          // ("position"),
+                          style: datalistStyle(),
+                        ),
+                      ),
+                      Obx(
+                            () => Container(
+                          child: controller.suspensionApprovedList.value[index].departmentId !=
+                              null
+                              ? Text(
+                            controller.suspensionApprovedList.value[index].departmentId.name,
+                            style: subtitleStyle(),
+                          )
+                              : Text('-'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 1,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Text(
+                          'Job Position',
+                          // ("date"),
+                          style: datalistStyle(),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          'Job Grade',
+                          style: datalistStyle(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Obx(
+                      () => Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex:1,
+                          child: Container(
+                            child: Text(
+                              AppUtils.removeNullString(controller.suspensionApprovedList.value[index].job_id.name),
+                              style: subtitleStyle(),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex:1,
+                          child: Align(
+                            alignment:Alignment.topRight,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:50.0),
+                                child: Text(
+                                  AppUtils.removeNullString(controller.suspensionApprovedList.value[index].job_grade_id.name),
                                   style: subtitleStyle(),
                                 ),
                               ),

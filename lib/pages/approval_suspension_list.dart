@@ -55,7 +55,7 @@ class _ApprovalSuspensionListState extends State<ApprovalSuspensionList> {
                 }
                 return true;
               },
-              child: ListView.builder(
+              child: controller.suspensionApprovalList.value.length > 0 ?ListView.builder(
                 itemCount: controller.suspensionApprovalList.value.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
@@ -97,7 +97,7 @@ class _ApprovalSuspensionListState extends State<ApprovalSuspensionList> {
                     ),
                   );
                 },
-              )),
+              ):SizedBox()),
         ));
   }
 }

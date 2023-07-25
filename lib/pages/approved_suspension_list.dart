@@ -28,8 +28,7 @@ class _ApprovedSuspensionListState extends State<ApprovedSuspensionList> {
   @override
   void initState() {
     super.initState();
-    //if(controller.travelApprovedList.value.length==0)
-    controller.offset.value = 0;
+    //controller.offset.value = 0;
     controller.getSuspensionApprovedList();
   }
 
@@ -52,7 +51,7 @@ class _ApprovedSuspensionListState extends State<ApprovedSuspensionList> {
                 }
                 return true;
               },
-              child: ListView.builder(
+              child: controller.suspensionApprovedList.value.length > 0 ?ListView.builder(
                 itemCount: controller.suspensionApprovedList.value.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
@@ -94,7 +93,7 @@ class _ApprovedSuspensionListState extends State<ApprovedSuspensionList> {
                     ),
                   );
                 },
-              )),
+              ): SizedBox()),
         ));
   }
 }

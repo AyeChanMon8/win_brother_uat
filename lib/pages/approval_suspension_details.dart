@@ -110,38 +110,7 @@ class _ApprovalSuspensionDetailsState extends State<ApprovalSuspensionDetails> {
                 Divider(
                   thickness: 1,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Department',
-                          // ("position"),
-                          style: datalistStyle(),
-                        ),
-                      ),
-                      Obx(
-                            () => Container(
-                          child: controller.suspensionApprovalList.length > 0 && controller.suspensionApprovalList.value[index].departmentId !=
-                              null
-                              ? Text(AppUtils.removeNullString(controller.suspensionApprovalList.value[index].departmentId.name)
-                            ,
-                            style: subtitleStyle(),
-                          )
-                              : Text('-'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Divider(
-                  thickness: 1,
-                ),
+                
                 SizedBox(
                   height: 10,
                 ),
@@ -206,6 +175,178 @@ class _ApprovalSuspensionDetailsState extends State<ApprovalSuspensionDetails> {
                   thickness: 1,
                 ),
 
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Text(
+                          'Department',
+                          // ("position"),
+                          style: datalistStyle(),
+                        ),
+                      ),
+                      Obx(
+                            () => Container(
+                          child: controller.suspensionApprovalList.length > 0 && controller.suspensionApprovalList.value[index].departmentId !=
+                              null
+                              ? Text(AppUtils.removeNullString(controller.suspensionApprovalList.value[index].departmentId.name)
+                            ,
+                            style: subtitleStyle(),
+                          )
+                              : Text('-'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 1,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                // Container(
+                //   margin: EdgeInsets.only(top: 10),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Container(
+                //         child: Text(
+                //           'Job Position',
+                //           // ("position"),
+                //           style: datalistStyle(),
+                //         ),
+                //       ),
+                //       Obx(
+                //             () => Container(
+                //           child: controller.suspensionApprovalList.length > 0 && controller.suspensionApprovalList.value[index].job_id !=
+                //               null
+                //               ? Text(AppUtils.removeNullString(controller.suspensionApprovalList.value[index].job_id.name)
+                //             ,
+                //             style: subtitleStyle(),
+                //           )
+                //               : Text('-'),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 10,
+                // ),
+                // Divider(
+                //   thickness: 1,
+                // ),
+                // SizedBox(
+                //   height: 10,
+                // ),
+                // Container(
+                //   margin: EdgeInsets.only(top: 10),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Container(
+                //         child: Text(
+                //           'Job Grade',
+                //           // ("position"),
+                //           style: datalistStyle(),
+                //         ),
+                //       ),
+                //       Obx(
+                //             () => Container(
+                //           child: controller.suspensionApprovalList.length > 0 && controller.suspensionApprovalList.value[index].job_grade_id !=
+                //               null
+                //               ? Text(AppUtils.removeNullString(controller.suspensionApprovalList.value[index].job_grade_id.name)
+                //             ,
+                //             style: subtitleStyle(),
+                //           )
+                //               : Text('-'),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 10,
+                // ),
+                // Divider(
+                //   thickness: 1,
+                // ),
+                // SizedBox(
+                //   height: 10,
+                // ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Text(
+                          'Job Position',
+                          // ("date"),
+                          style: datalistStyle(),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          'Job Grade',
+                          style: datalistStyle(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Obx(
+                      () => Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex:1,
+                          child: Container(
+                            child: controller.suspensionApprovalList.length > 0 && controller.suspensionApprovalList.value[index].job_id !=
+                              null
+                              ? Text(
+                              AppUtils.removeNullString(controller.suspensionApprovalList.value[index].job_id.name),
+                              style: subtitleStyle(),
+                            ): Text('-'),
+                          ),
+                        ),
+                        Expanded(
+                          flex:1,
+                          child: Align(
+                            alignment:Alignment.topRight,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:50.0),
+                                child: controller.suspensionApprovalList.length > 0 && controller.suspensionApprovalList.value[index].job_grade_id !=
+                              null
+                              ? Text(
+                                  AppUtils.removeNullString(controller.suspensionApprovalList.value[index].job_grade_id.name),
+                                  style: subtitleStyle(),
+                                ): Text('-'),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 1,
+                ),
                 SizedBox(
                   height: 10,
                 ),
