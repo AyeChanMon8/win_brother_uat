@@ -571,199 +571,197 @@ class _PlanTripDetailsState extends State<PlanTripDetails>
   Widget fuelInContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
 
-    return Expanded(
-        child: Column(
+    return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.date,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.product,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Text(
-                    labels.quantity,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.unitPrice,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.amount,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              controller.plantrip_with_product_list[arg_index].state == "close"
-                  ? SizedBox()
-                  : Expanded(flex: 1, child: SizedBox()),
-              Expanded(flex: 1, child: Text('')),
-            ],
+    Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.date,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.product,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 2,
+              child: Text(
+                labels.quantity,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.unitPrice,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.amount,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          controller.plantrip_with_product_list[arg_index].state == "close"
+              ? SizedBox()
+              : Expanded(flex: 1, child: SizedBox()),
+          Expanded(flex: 1, child: Text('')),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: backgroundIconColor,
+      ),
+    ),
+    Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: fuelInListWidget(context),
+      ),
+    ),
+    controller.plantrip_with_product_list[arg_index].state == 'running' &&
+            isDriver == true ||is_spare == true&&
+            is_branch_manager == false
+        ? Align(
+          alignment:Alignment.topRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              Get.to(AddFuelPage(
+                      "PlanTripProduct",
+                      controller.plantrip_with_product_list[arg_index].id,
+                      controller.plantrip_with_product_list[arg_index]
+                          .fromDatetime,
+                      controller.plantrip_with_product_list[arg_index]
+                          .toDatetime))
+                  .then((value) {
+                if (value != null) {
+                  DayTripPlanTripGeneralController general_controller =
+                      Get.find();
+                  controller
+                      .plantrip_with_product_list[arg_index].fuelinIds
+                      .add(
+                    Fuelin_ids(
+                        id: value,
+                        date: general_controller.dateTextController.text,
+                        shop: general_controller
+                            .shopNameTextController.text,
+                        productId: Product_id(
+                            id: general_controller.selectedProduct.id,
+                            name:
+                                general_controller.selectedProduct.name),
+                        slipNo:
+                            general_controller.slipNoTextController.text,
+                        liter: double.tryParse(
+                            general_controller.qtyController.text),
+                        priceUnit: double.tryParse(
+                            general_controller.priceController.text),
+                        amount: double.tryParse(general_controller
+                            .totalFuelInAmtController.text)),
+                  );
+                }
+              });
+            },
+            mini: true,
+            child: Icon(Icons.add),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: backgroundIconColor,
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: fuelInListWidget(context),
-          ),
-        ),
-        controller.plantrip_with_product_list[arg_index].state == 'running' &&
-                isDriver == true ||is_spare == true&&
-                is_branch_manager == false
-            ? Align(
-              alignment:Alignment.topRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  Get.to(AddFuelPage(
-                          "PlanTripProduct",
-                          controller.plantrip_with_product_list[arg_index].id,
-                          controller.plantrip_with_product_list[arg_index]
-                              .fromDatetime,
-                          controller.plantrip_with_product_list[arg_index]
-                              .toDatetime))
-                      .then((value) {
-                    if (value != null) {
-                      DayTripPlanTripGeneralController general_controller =
-                          Get.find();
-                      controller
-                          .plantrip_with_product_list[arg_index].fuelinIds
-                          .add(
-                        Fuelin_ids(
-                            id: value,
-                            date: general_controller.dateTextController.text,
-                            shop: general_controller
-                                .shopNameTextController.text,
-                            productId: Product_id(
-                                id: general_controller.selectedProduct.id,
-                                name:
-                                    general_controller.selectedProduct.name),
-                            slipNo:
-                                general_controller.slipNoTextController.text,
-                            liter: double.tryParse(
-                                general_controller.qtyController.text),
-                            priceUnit: double.tryParse(
-                                general_controller.priceController.text),
-                            amount: double.tryParse(general_controller
-                                .totalFuelInAmtController.text)),
-                      );
-                    }
-                  });
-                },
-                mini: true,
-                child: Icon(Icons.add),
-              ),
-            )
-              
-            : Container(),
+        )
+          
+        : Container(),
       ],
-    ));
+    );
   }
 
   Widget consumptionContainer(BuildContext context) {
     var labels = AppLocalizations.of(context);
 
-    return Expanded(
-        child: Column(
+    return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.route,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    labels.stdLit,
-                    style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      labels.actualLit,
-                      style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      labels.description,
-                      style: TextStyle(color: backgroundIconColor,fontSize: 11),
-                    ),
-                  )),
-              controller.plantrip_with_product_list[arg_index].state == 'close'
-                  ? SizedBox()
-                  : Expanded(flex: 1, child: SizedBox()),
-              controller.plantrip_with_product_list[arg_index].state ==
-                          'running' &&
-                      isDriver == true ||is_spare == true&&
-                      is_branch_manager == false
-                  ? Expanded(flex: 1, child: SizedBox())
-                  : SizedBox(),
-            ],
+    Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.route,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Text(
+                labels.stdLit,
+                style: TextStyle(color: backgroundIconColor,fontSize: 11),
+              )),
+          Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  labels.actualLit,
+                  style: TextStyle(color: backgroundIconColor,fontSize: 11),
+                ),
+              )),
+          Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  labels.description,
+                  style: TextStyle(color: backgroundIconColor,fontSize: 11),
+                ),
+              )),
+          controller.plantrip_with_product_list[arg_index].state == 'close'
+              ? SizedBox()
+              : Expanded(flex: 1, child: SizedBox()),
+          controller.plantrip_with_product_list[arg_index].state ==
+                      'running' &&
+                  isDriver == true ||is_spare == true&&
+                  is_branch_manager == false
+              ? Expanded(flex: 1, child: SizedBox())
+              : SizedBox(),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: backgroundIconColor,
+      ),
+    ),
+    Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: consumptionListWidget(context),
+      ),
+    ),
+    controller.plantrip_with_product_list.value[arg_index].state ==
+                'running' &&
+            isDriver == true ||is_spare == true&&
+            is_branch_manager == false
+        ? Align(
+         alignment: Alignment.topRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              fuelAddDialog(0, null);
+            },
+            mini: true,
+            child: Icon(Icons.add),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, right: 0, left: 0),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: backgroundIconColor,
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: consumptionListWidget(context),
-          ),
-        ),
-        controller.plantrip_with_product_list.value[arg_index].state ==
-                    'running' &&
-                isDriver == true ||is_spare == true&&
-                is_branch_manager == false
-            ? Align(
-             alignment: Alignment.topRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  fuelAddDialog(0, null);
-                },
-                mini: true,
-                child: Icon(Icons.add),
-              ),
-            )
-            : new Container(),
+        )
+        : new Container(),
       ],
-    ));
+    );
   }
 
   Widget wayBillContainer(BuildContext context) {
