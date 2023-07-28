@@ -333,17 +333,21 @@ class _ApprovalDetailsState extends State<ApprovalDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: Text(
-                  (labels?.description + " :"),
-                  style: datalistStyle(),
+                child: Expanded(
+                  child: Text(
+                    (labels?.description + " :"),
+                    style: datalistStyle(),
+                  ),
                 ),
               ),
               Container(
                 child: controller.leaveApprovalList.value[index].description !=
                         null
-                    ? Text(
-                        controller.leaveApprovalList.value[index].description,
-                        style: subtitleStyle())
+                    ? Expanded(
+                      child: Text(
+                          controller.leaveApprovalList.value[index].description,
+                          style: subtitleStyle()),
+                    )
                     : Text('-'),
               ),
             ],
