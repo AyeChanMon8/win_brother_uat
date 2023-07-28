@@ -156,7 +156,8 @@ class _PlanTripWayBillDetailsState extends State<PlanTripWayBillDetails> with Si
                           data: new ThemeData(
                             primaryColor: textFieldTapColor,
                           ),
-                          child: controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].startActualDate!=null ? Text(controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].startActualDate): SizedBox(),
+                          child: controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].startActualDate!=null ? Text(AppUtils.changeDateAndTimeFormat(
+                controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].startActualDate)): SizedBox(),
                         )),
                   ),
                    Expanded(
@@ -167,7 +168,8 @@ class _PlanTripWayBillDetailsState extends State<PlanTripWayBillDetails> with Si
                           data: new ThemeData(
                             primaryColor: textFieldTapColor,
                           ),
-                          child: controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].endActualDate!=null ? Text(controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].endActualDate): Expanded(child: Container(
+                          child: controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].endActualDate!=null ? Text(AppUtils.changeDateAndTimeFormat(
+                controller.plantrip_with_waybill_list[controller.arg_index.value].routePlanIds[index1].endActualDate)): Expanded(child: Container(
                             margin: EdgeInsets.only(right: 10),
                           )),
                         )),
@@ -909,7 +911,7 @@ class _PlanTripWayBillDetailsState extends State<PlanTripWayBillDetails> with Si
     controller.plantrip_waybill_id = controller.plantrip_with_waybill_list.value[controller.arg_index.value].id;
     double width = MediaQuery.of(context).size.width;
     double customWidth = width * 0.30;
-    var from_date = AppUtils.changeDefaultDateTimeFormat(controller.plantrip_with_waybill_list[controller.arg_index.value].fromDatetime);
+    var from_date = controller.plantrip_with_waybill_list[controller.arg_index.value].fromDatetime;
     to_date =  AppUtils.changeDefaultDateTimeFormat(controller.plantrip_with_waybill_list[controller.arg_index.value].toDatetime);
 
     return Scaffold(
@@ -998,7 +1000,7 @@ class _PlanTripWayBillDetailsState extends State<PlanTripWayBillDetails> with Si
                     children: [
                       AutoSizeText(labels.toDate,style: maintitlenoBoldStyle(),),
                       SizedBox(height: 5,),
-                      AutoSizeText('${AppUtils.changeDefaultDateTimeFormat(controller.plantrip_with_waybill_list[controller.arg_index.value].toDatetime)}',style: maintitleStyle(),)
+                      AutoSizeText(controller.plantrip_with_waybill_list[controller.arg_index.value].toDatetime,style: maintitleStyle(),)
                     ],)),
                 ],),
                 SizedBox(height: 10,),
