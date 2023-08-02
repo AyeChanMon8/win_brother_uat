@@ -144,11 +144,19 @@ void createMaintenanceRequest() async{
             barrierDismissible: false));
     await maintenanceService.createMaintenanceRequestModel(employee_id,selectedVehicle.id,from_date_time, to_date_time,maintenanceProductIdLists,priority.toInt(),descriptionTextController.text,imageList,before_image_one_base64,before_image_two_base64,
     before_image_three_base64,after_image_one_base64,after_image_two_base64,after_image_three_base64,selectedVehicle,formattedTodayDate).then((data) {
-      if(data.length>0){
-          maintenanceList.value = data;
-          Get.back();
-          Get.back();
-      }
+      if(data!=null){
+      Get.back();
+      AppUtils.showConfirmDialog('Information', "Successfully Created!",() async {
+      maintenanceList.value = data;
+      Get.back();
+      Get.back();
+      });
+    };
+      // if(data!=null){
+      //     maintenanceList.value = data;
+      //     Get.back();
+      //     Get.back();
+      // }
       // else{
       //   Get.back();
       //   Get.back();
@@ -237,7 +245,7 @@ void approveMaintenance(int id) async{
           barrierDismissible: false));
   var employee_id = box.read('emp_id');
   await maintenanceService.approveMaintenance(employee_id,id,current_page.value).then((data) {
-    if(data!=null && data.length > 0){
+    if(data!=null){
       Get.back();
       AppUtils.showConfirmDialog('Information', "Successfully Approved!",() async {
       maintenanceList.value = data;
@@ -259,7 +267,7 @@ void rejectMaintenance(int id) async{
           barrierDismissible: false));
   var employee_id = box.read('emp_id');
   await maintenanceService.rejectMaintenance(employee_id,id,current_page.value).then((data) {
-     if(data!=null && data.length > 0){
+     if(data!=null){
       Get.back();
       AppUtils.showConfirmDialog('Information', "Successfully Declined!",() async {
       maintenanceList.value = data;
@@ -284,9 +292,14 @@ void secondApprove(int id) async{
           barrierDismissible: false));
   var employee_id = box.read('emp_id');
   await maintenanceService.secondApproveMaintenance(employee_id,id,current_page.value).then((data) {
-    maintenanceList.value = data;
-    Get.back();
-    Get.back();
+    if(data!=null){
+      Get.back();
+      AppUtils.showConfirmDialog('Information', "Successfully Approved!",() async {
+       maintenanceList.value = data;
+      Get.back();
+      Get.back();
+      });
+    }
   });
 }
 void resubmitClick(int id) async{
